@@ -6,7 +6,7 @@ Integrantes: Luciano Chiroli, Nicolas Barzola, Gabriel Araya, Bruno Padilla, San
 
 Nombre de proyecto: Nivel De Mario Bros
 
-    Descripción: Para este proyecto hemos decidido realizar recodificar uno de los juegos más populares de nintendo 
+    Descripción: Para este proyecto hemos decidido recodificar uno de los juegos más populares de nintendo 
 que es Mario Bros.
     Nuestra idea surge ya que a nuestro grupo le apasiona y le gusta mucho la programación de videojuegos. Entonces,
 Después de debatir por arduas semanas, llegamos a la conclusión de realizar este proyecto en Python.
