@@ -6,7 +6,7 @@ TITULO_ORIGINAL = "Super Mario Bros - Nivel 1"
 
 #======= COLORES ============# 
 
-#              R    G    B
+#                  R    G    B
 GRIS           = (100, 100, 100)
 AZULMARINO     = ( 60,  60, 100)
 BLANCO         = (255, 255, 255)
@@ -133,7 +133,7 @@ BAJO_MASTIL = 'parte de abajo del mastil'
 #puntaje para la vida extra
 UNA_VIDA = '379'
 
-#OPCIONES DEL CURSOR DEL MENU PRINCIPAL
+#OPCIONES DEL CURSOR DEL MENU PRINCIPAL hola
 PLAYER1 = '1 player'
 PLAYER2 = '2 player'
 
