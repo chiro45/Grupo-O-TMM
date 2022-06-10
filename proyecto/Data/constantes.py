@@ -48,3 +48,56 @@ VELOCIDAD_SALTO_RAPIDO = -12.5
 
 MAX_VEL_EJEY = 11
 
+
+
+#Estados de mario
+
+PARARSE = 'de pie'
+CAMINAR = 'caminar'
+SALTO = 'salto'
+CAERSE = 'caerse'
+PEQUEÑO_A_GRANDE = 'pequeño a grande'
+GRANDE_PARA_DISPARAR = 'grande para disparar'
+GRANDE_A_PEQUEÑO = 'grande a pequeño'
+ASTA_DE_BANDERA = 'asta de bandera'
+CAMINANDO_AL_CASTILLO = 'caminando al castillo'
+FIN_DEL_NIVEL = 'fin del nivel'
+
+
+#Cosas de GOOMBA
+
+IZQUIERDA = 'izquierda'
+DERECHA = 'derecha'
+SALTO_SOBRE = 'salto sobre'
+SALTO_MORTAL = 'salto mortal'
+
+#Cosas de KOOPA
+
+DESLICE_DE_CAPARAZON = 'deslice_de_caparazon'
+
+#Estados del ladrillo
+
+LADRILLO_EN_REPOSO = 'ladrillo en reposo'
+LADRILLO_GOLPEADO = 'ladrillo golpeado'
+
+#Estados de la moneda
+ABIERTA = 'abierta'
+
+#Estados del hongo
+
+REVELADO = 'revelado'
+DESLIZANDOSE = 'deslizandose'
+
+#Estados de la moneda
+
+GIRAR = 'girar'
+
+#Estados de las estrellas
+
+REBOTE = 'rebote'
+
+#Estados del fuego
+
+VOLANDO = 'VOLANDO'
+REBOTANDO = 'rebotando'
+EXPLOTANDO = 'explotando'
