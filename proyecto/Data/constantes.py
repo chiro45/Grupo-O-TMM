@@ -101,3 +101,72 @@ REBOTE = 'rebote'
 VOLANDO = 'VOLANDO'
 REBOTANDO = 'rebotando'
 EXPLOTANDO = 'explotando'
+
+#Contenidos de las cajas y monedas
+
+HONGOS = 'hongos'
+ESTRELLA = 'estrella'
+FLOR_FUEGO = 'flordefuego'
+SEISMONEDAS = '6monedas'
+MONEDA = 'moneda'
+HONGO_DE_VIDA = 'vida_extra_hongo'
+
+BOLA_DE_FUEGO = 'boladefuego'
+
+#Listado de Enemigos
+
+GOOMBA = 'goomba' # el honguito marron
+KOOPA = 'koopa'   # La tortuga
+
+#Estados de los niveles
+
+CONGELADO = 'congelado'
+NO_CONGELADO = 'no congelado'
+EN_CASTILLO = 'en castillo'
+BANDERA_Y_FUEGOS_ARTIFICIALES = 'bandera y fuegos artificiales'
+
+#Estado de la bandera
+ARRIBA_MASTIL = 'arriba del mastil'
+MEDIO_MASTIL = 'medio del mastil'
+BAJO_MASTIL = 'parte de abajo del mastil'
+
+#puntaje para la vida extra
+UNA_VIDA = '379'
+
+#OPCIONES DEL CURSOR DEL MENU PRINCIPAL
+PLAYER1 = '1 player'
+PLAYER2 = '2 player'
+
+#Estado de informacion en la parte superior
+MENU_PRINCIPAL = 'menu principal'
+PANTALLA_DE_CARGA = 'pantalla de carga'
+NIVEL = 'nivel'
+JUEGO_TERMINADO = 'juego terminado'
+CUENTA_REGRESIVA_RAPIDA = 'cuenta regresiva rapida'
+FINAL_DEL_NIVEL = 'final del nivel'
+
+
+#Info de las teclas del juego
+TOTAL_MONEDAS = 'total de monedas'
+PUNTAJE = 'puntaje'
+MEJOR_PUNTAJE = 'mejor puntaje'
+VIDAS = 'vidas'
+TIEMPO_ACTUAL = 'tiempo actual'
+ESTADO_DEL_NIVEL = 'estado del nivel'
+INICIO_DE_CAMARA_X = 'inicio de la camara x'
+MARIO_MUERTO = 'mario muerto'
+
+#ESTADOS PARA TODO EL JUEGO
+MENU_PRINCIPAL = 'menu principal'
+PANTALLA_DE_CARGA = 'pantalla de carga'
+TIEMPO_TERMINADO = 'tiempo terminado'
+JUEGO_TERMINADO = 'juego terminado'
+NIVEL1 = 'nivel 1'
+
+#ESTADOS DE SONIDOS
+NORMAL = 'normal'
+NIVEL_TERMINADO = 'nivel terminado'
+MUNDO_TERMINADO = 'mundo terminado'
+AVISO_DE_TIEMPO = 'aviso de poco tiempo restante'
+VELOCIDAD_NORMAL = 'velocidad normal'
+MARIO_INVENCIBLE = 'mario invencible'
