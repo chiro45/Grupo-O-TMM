@@ -133,7 +133,7 @@ BAJO_MASTIL = 'parte de abajo del mastil'
 #puntaje para la vida extra
 UNA_VIDA = '379'
 
-#OPCIONES DEL CURSOR DEL MENU PRINCIPAL hola
+#OPCIONES DEL CURSOR DEL MENU PRINCIPAL
 PLAYER1 = '1 player'
 PLAYER2 = '2 player'
 
