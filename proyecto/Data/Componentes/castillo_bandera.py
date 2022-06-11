@@ -7,39 +7,39 @@ class Bandera(pg.sprite.Sprite):
     def __init__(self, x, y):
         """Incia objeto"""
         super(Bandera, self).__init__()
-        self.sprite_sheet = configuracion.GFX['item_objects']
+        self.sprite_sheet = configuracion.GFX['item_objetos']
         self.imagen = self.get_imagen(129, 2, 14, 14)
         self.rect = self.imagen.get_rect()
         self.rect.x = x
         self.rect.y = y
-        self.estado = 'resting'
+        self.estado = 'eleva'
         self.y_vel = -2
         self.altura_objetivo = y
 
 
     def get_imagen(self, x, y, ancho, alto):
         """Extrae la imagen de la hoja de sprites."""
-        imagen = pg.Surface([ancho, alto])
+        imagen = pg.Superficie([ancho, alto])
         rect = imagen.get_rect()
 
         imagen.blit(self.sprite_sheet, (0, 0), (x, y, ancho, alto))
-        imagen.set_colorkey(c.NEGRO)
-        imagen = pg.transform.scale(imagen,
+        imagen.clave(c.NEGRO)
+        imagen = pg.transforma.escala(imagen,
                                    (int(rect.ancho*c.TAMAÑO_MULTIPLICADOR),
                                     int(rect.alto*c.TAMAÑO_MULTIPLICADOR)))
         return imagen
 
     def update(self, *args):
         """Actualiza la posición de la bandera"""
-        if self.estado == 'resting':
-            self.resting()
+        if self.estado == 'eleva':
+            self.eleva()
         elif self.estado == 'descansa':
             self.descansa()
 
-    def resting(self):
+    def eleva(self):
         """Indica cuándo se iza la bandera para estar en el castillo"""
         self.rect.y += self.y_vel
-        if self.rect.bottom <= self.altura_objetivo:
+        if self.rect.abajo <= self.altura_objetivo:
             self.estado = 'descansa'
 
     def descansa(self):
