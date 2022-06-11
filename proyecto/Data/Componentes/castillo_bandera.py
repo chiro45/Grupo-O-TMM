@@ -17,19 +17,19 @@ class Bandera(pg.sprite.Sprite):
         self.altura_objetivo = y
 
 
-    def get_imagen(self, x, y, ancho, alto):
+    def obtener_imagen(self, x, y, ancho, alto):
         """Extrae la imagen de la hoja de sprites."""
         imagen = pg.Superficie([ancho, alto])
         rect = imagen.get_rect()
 
         imagen.blit(self.sprite_sheet, (0, 0), (x, y, ancho, alto))
-        imagen.clave(c.NEGRO)
+        imagen.clave_color(c.NEGRO)
         imagen = pg.transforma.escala(imagen,
                                    (int(rect.ancho*c.TAMAÑO_MULTIPLICADOR),
                                     int(rect.alto*c.TAMAÑO_MULTIPLICADOR)))
         return imagen
 
-    def update(self, *args):
+    def actualizar(self, *args):
         """Actualiza la posición de la bandera"""
         if self.estado == 'eleva':
             self.eleva()
