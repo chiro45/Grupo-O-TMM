@@ -5,16 +5,16 @@ import pygame as pg
 from .. import configuracion, herramientas
 from .. import constantes as c
 from .. import sonido_juego
-from .. componentes import mario
-from .. componentes import colisionador
-from .. componentes import ladrillos
-from .. componentes import caja_monedas
-from .. componentes import enemigos
-from .. componentes import puntoGuardado
-from .. componentes import astaBandera
-from .. componentes import informacion
-from .. componentes import puntaje
-from .. componentes import bandera_castillo
+from .. Componentes import mario
+from .. Componentes import colisionador
+from .. Componentes import ladrillos
+from .. Componentes import caja_monedas
+from .. Componentes import enemigos
+from .. Componentes import puntoGuardado
+from .. Componentes import astaBandera
+from .. Componentes import informacion
+from .. Componentes import puntaje
+from .. Componentes import bandera_castillo
 
 
 class Nivel1(herramientas._Estado):
