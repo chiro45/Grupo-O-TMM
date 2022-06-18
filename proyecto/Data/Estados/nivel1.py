@@ -373,8 +373,8 @@ class Nivel1(herramientas._Estado):
     def actualizar_en_estado_transicion(self, llaves):
         """Actualiza a mario en un estado de transición. Comprueba si deja el estado de transición o muere para volver a cambiar el estado del nivel"""
         self.mario.actualizar(llaves, self.informacion_juego, self.grupo_encendido)
-        for puntaje in self.moviendo_lista_puntajes:
-            puntaje.actualizar(self.moviendo_lista_puntajes, self.informacion_juego)
+        for puntaje in self.lista_puntaje_movimiento:
+            puntaje.actualizar(self.lista_puntaje_movimiento, self.informacion_juego)
         if self.puntuacion_bandera:
             self.puntuacion_bandera.actualizar(None, self.informacion_juego)
             self.marca_agregar_puntaje_bandera()
@@ -383,4 +383,37 @@ class Nivel1(herramientas._Estado):
         self.comprobacion_mario_estado_transicion()
         self.marcar_bandera()
         self.comprobacion_muerte_mario()
+        self.pantalla_informacion_superior.actualizar(self.informacion_juego, self.mario)
+
+    def comprobacion_mario_estado_transicion(self):
+        """Si mario está en un estado de transición, el nivel estará en CONGELACIÓN estado"""
+        if self.mario.en_estado_transicion:
+            self.informacion_juego[c.ESTADO_DEL_NIVEL] = self.estado = c.FRIZADO
+        elif self.mario.en_estado_transicion == False:
+            if self.estado == c.FRIZADO:
+                self.informacion_juego[c.ESTADO_DEL_NIVEL] = self.estado = c.NO_FRIZADO
+
+
+    def actualizar_sprites(self, llaves):
+        """Actualiza la ubicación de todos los sprites en la pantalla."""
+        self.mario.actualizar(llaves, self.informacion_juego, self.grupo_encendido)
+        for puntaje in self.lista_puntaje_movimiento:
+            puntaje.actualizar(self.lista_puntaje_movimiento, self.informacion_juego)
+        if self.puntuacion_bandera:
+            self.puntuacion_bandera.actualizar(None, self.informacion_juego)
+            self.marca_agregar_puntaje_bandera()
+        self.grupo_asta_bandera.actualizar()
+        self.puntos_control()
+        self.grupo_enemigo.actualizar(self.informacion_juego)
+        self.grupo_sprites_mueriendo.actualizar(self.informacion_juego, self.ventana_grafica)
+        self.grupo_conchas.actualizar(self.informacion_juego)
+        self.grupo_ladrillos.actualizar()
+        self.grupo_cajas_monedas.actualizar(self.informacion_juego)
+        self.grupo_encendido.actualizar(self.informacion_juego, self.ventana_grafica)
+        self.coin_group.actualizar(self.informacion_juego, self.ventana_grafica)
+        self.grupo_piezas_ladrillos.actualizar()
+        self.ajustar_posicion_ladrillos()
+        self.comprobacion_mario_estado_transicion()
+        self.comprobacion_muerte_mario()
+        self.actualizar_ventana_grafica()
         self.pantalla_informacion_superior.actualizar(self.informacion_juego, self.mario)

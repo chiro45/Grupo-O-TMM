@@ -22,7 +22,9 @@ class Controles(object):
         self.mostrar_fps = False
         self.tiempo_actual = 0.0
         self.teclas = pg.key.get_pressed()
-
+        self.estado_actual = {}
+        self.nombre_estado = None
+        self.estado = None
 
    
 
