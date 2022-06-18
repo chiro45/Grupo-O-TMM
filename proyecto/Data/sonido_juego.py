@@ -21,7 +21,7 @@ class Sonido(object):
             pg.mixer.music.load(self.diccionario_music['tema_base'])
             pg.mixer.music.play()
             self.estado = c.NORMAL
-        elif self.overhead_info.state == c.JUEGO_TERMINADO:
+        elif self.informacion_juego.state == c.JUEGO_TERMINADO:
             pg.mixer.music.load(self.diccionario_music['juego_terminado'])
             pg.mixer.music.play()
             self.estado = c.GAME_OVER
@@ -33,6 +33,27 @@ class Sonido(object):
         self.mario = mario
         self.manejador_estado()
 
-   
+    def  manejador_estado(self):
+        "==============Maneja el estado del sonido de los objetos==========="
+        if self.estado == c.NORMAL:
+            if self.mario.muere:
+                self.inicia_musica('muerte', c.MARIO_MUERTO)
+            elif self.mario.invencible \
+                    and self.mario.pierde_invencibilidad == False:
+                self.inicia_musica('invencible', c.MARIO_INVENCIBLE)
+            elif self.mario == c.ASTA_DE_BANDERA:
+                self.inicia_musica('bandera1', c.ASTA_DE_BANDERA)
+            elif self.informacion_juego.tiempo == 100:
+                self.inicia_musica('poco_tiempo', c.AVISO_DE_TIEMPO)
 
 
+        elif self.estado == c.ASTA_DE_BANDERA:
+            if self.mario.estado == c.CAMINANDO_AL_CASTILLO:
+                self.inicia_musica('nivel_terminado', c.NIVEL_TERMINADO)
+
+        elif self.estado == c.NIVEL_TERMINADO:
+            if self.mario.en_castillo:
+                self.inicia_musica['cuenta_atras_monedas'].play()
+                self.estado = c.CUENTA_REGRESIVA_RAPIDA
+
+       
