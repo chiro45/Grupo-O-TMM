@@ -15,13 +15,13 @@ class Controles(object):
     
     def __init__(self, titulo):
         self.PANTALLA = pg.display.get_surface()
-        self.done = False
-        self.tiempo= pg.time.Clock()
+        self.hecho = False
+        self.tiempo = pg.time.Clock()
         self.titulo = titulo
         self.fps = 60
-        self.show_fps = False
-        self.current_time = 0.0
-        self.keys = pg.key.get_pressed()
+        self.mostrar_fps = False
+        self.tiempo_actual = 0.0
+        self.teclas = pg.key.get_pressed()
 
 
    
