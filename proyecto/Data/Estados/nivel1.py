@@ -357,3 +357,30 @@ class Nivel1(herramientas._Estado):
         self.pcontrol_si_sin_tiempo()
         self.arruinar_todo(superficie)
         self.administracion_sonido.actualizar(self.informacion_juego, self.mario)
+
+    def manejo_estados(self, llaves):
+        """Si el nivel está en estado CONGELADO, solo Mario se actualizará."""
+        if self.estado == c.FRIZADO:
+            self.actualizar_estado_transicion(llaves)
+        elif self.estado == c.NO_FRIZADO:
+            self.atualizar_sprites(llaves)
+        elif self.estado == c.EN_CASTILLO:
+            self.actualizar_castillo()
+        elif self.estado == c.BANDERA_FUEGOSARTIFICIALES:
+            self.actualizar_bandera_fuegosArtificiales()
+
+
+    def actualizar_en_estado_transicion(self, llaves):
+        """Actualiza a mario en un estado de transición. Comprueba si deja el estado de transición o muere para volver a cambiar el estado del nivel"""
+        self.mario.actualizar(llaves, self.informacion_juego, self.grupo_encendido)
+        for puntaje in self.moviendo_lista_puntajes:
+            puntaje.actualizar(self.moviendo_lista_puntajes, self.informacion_juego)
+        if self.puntuacion_bandera:
+            self.puntuacion_bandera.actualizar(None, self.informacion_juego)
+            self.marca_agregar_puntaje_bandera()
+        self.grupo_cajas_monedas.actualizar(self.informacion_juego)
+        self.grupo_asta_bandera.actualizar(self.informacion_juego)
+        self.comprobacion_mario_estado_transicion()
+        self.marcar_bandera()
+        self.comprobacion_muerte_mario()
+        self.pantalla_informacion_superior.actualizar(self.informacion_juego, self.mario)
