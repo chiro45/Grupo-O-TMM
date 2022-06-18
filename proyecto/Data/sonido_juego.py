@@ -21,10 +21,10 @@ class Sonido(object):
             pg.mixer.music.load(self.diccionario_music['tema_base'])
             pg.mixer.music.play()
             self.estado = c.NORMAL
-        elif self.informacion_juego.state == c.JUEGO_TERMINADO:
+        elif self.informacion_juego.estado == c.JUEGO_TERMINADO:
             pg.mixer.music.load(self.diccionario_music['juego_terminado'])
             pg.mixer.music.play()
-            self.estado = c.GAME_OVER
+            self.estado = c.JUEGO_TERMINADO
 
 
     def actualizar(self, informacion_juego , mario):
@@ -53,7 +53,49 @@ class Sonido(object):
 
         elif self.estado == c.NIVEL_TERMINADO:
             if self.mario.en_castillo:
-                self.inicia_musica['cuenta_atras_monedas'].play()
+                self.inicia_musica['cuenta_atras'].play()
                 self.estado = c.CUENTA_REGRESIVA_RAPIDA
+
+        
+        elif self.estado == c.CUENTA_REGRESIVA_RAPIDA:
+            if self.informacion_juego.tiempo == 0:
+                self.sfx_dict['cuenta_regresiva'].stop()
+                self.estado = c.MUNDO_TERMINADO
+
+        elif self.estado == c. AVISO_DE_TIEMPO:
+            if pg.mixer.music.get_busy() == 0:
+                self.inicia_musica('tema_principal_acelerado', c.VELOCIDAD_NORMAL)
+            elif self.mario.muerto:
+                self.inicia_musica('muerte', c.MARIO_MUERTO)
+
+        elif self.estado == c.VELOCIDAD_NORMAL:
+            if self.mario.muerto:
+                self.inicia_musica('muerte', c.MARIO_MUERTO)
+            elif self.mario.estado == c.ASTA_DE_BANDERA:
+                self.inicia_musica('asta_de_bandera', c.ASTA_DE_BANDERA)
+
+        elif self.estado == c.MARIO_INVENCIBLE:
+            if (self.mario.tiempo_actual - self.mario.invencible_temporizador_inicia) > 11000:
+                self.inicia_musica('1ipal', c.NORMAL)
+            elif self.mario.muerto:
+                self.inicia_musica('muerte', c.MARIO_MUERTO)
+
+
+        elif self.estado == c.MUNDO_TERMINADO:
+            pass
+        elif self.estado == c.MARIO_MUERTO:
+            pass
+        elif self.estado == c.JUEGO_TERMINADO:
+            pass
+
+    def inicia_musica(self, llave, estado):
+        """Reproduce música nueva"""
+        pg.mixer.music.load(self.diccionario_music[llave])
+        pg.mixer.music.play()
+        self.estado = estado
+
+    def para_musica(self):
+        """Detiene la reproducción"""
+        pg.mixer.music.stop()
 
        
