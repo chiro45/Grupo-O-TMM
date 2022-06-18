@@ -4,10 +4,10 @@ from .. import constantes as c
 
 class Digito(pg.sprite.Sprite):
     """Dígito individual para puntuación"""
-    def __init__(self, imagen):
+    def __init__(self, image):
         super(Digito, self).__init__()
-        self.imagen = imagen
-        self.rect = imagen.obtener_rect()
+        self.image = image
+        self.rect = image.obtener_rect()
 
 
 class Puntaje(object):
@@ -20,48 +20,48 @@ class Puntaje(object):
         else:
             self.y_vel = -3
         self.sprite_sheet = configuracion.GFX['item_objetos']
-        self.crear_imagen_dic()
+        self.crear_image_dic()
         self.Puntaje_string = str(Puntaje)
         self.crear_Digito_lista()
         self.asta_bandera_Puntaje = asta_bandera
 
 
-    def crear_imagen_dic(self):
+    def crear_image_dic(self):
         """Crea el diccionario para todas las imágenes numéricas necesarias"""
-        self.imagen_dic = {}
+        self.image_dic = {}
 
-        imagen0 = self.obtener_imagen(1, 168, 3, 8)
-        imagen1 = self.obtener_imagen(5, 168, 3, 8)
-        imagen2 = self.obtener_imagen(8, 168, 4, 8)
-        imagen4 = self.obtener_imagen(12, 168, 4, 8)
-        imagen5 = self.obtener_imagen(16, 168, 5, 8)
-        imagen8 = self.obtener_imagen(20, 168, 4, 8)
-        imagen9 = self.obtener_imagen(32, 168, 5, 8)
-        imagen10 = self.obtener_imagen(37, 168, 6, 8)
-        imagen11 = self.obtener_imagen(43, 168, 5, 8)
+        image0 = self.obtener_image(1, 168, 3, 8)
+        image1 = self.obtener_image(5, 168, 3, 8)
+        image2 = self.obtener_image(8, 168, 4, 8)
+        image4 = self.obtener_image(12, 168, 4, 8)
+        image5 = self.obtener_image(16, 168, 5, 8)
+        image8 = self.obtener_image(20, 168, 4, 8)
+        image9 = self.obtener_image(32, 168, 5, 8)
+        image10 = self.obtener_image(37, 168, 6, 8)
+        image11 = self.obtener_image(43, 168, 5, 8)
 
-        self.imagen_dic['0'] = imagen0
-        self.imagen_dic['1'] = imagen1
-        self.imagen_dic['2'] = imagen2
-        self.imagen_dic['4'] = imagen4
-        self.imagen_dic['5'] = imagen5
-        self.imagen_dic['8'] = imagen8
-        self.imagen_dic['3'] = imagen9
-        self.imagen_dic['7'] = imagen10
-        self.imagen_dic['9'] = imagen11
+        self.image_dic['0'] = image0
+        self.image_dic['1'] = image1
+        self.image_dic['2'] = image2
+        self.image_dic['4'] = image4
+        self.image_dic['5'] = image5
+        self.image_dic['8'] = image8
+        self.image_dic['3'] = image9
+        self.image_dic['7'] = image10
+        self.image_dic['9'] = image11
 
 
-    def obtener_imagen(self, x, y, ancho, alto):
-        """Extrae la imagen de las plantillas"""
-        imagen = pg.Superficie([ancho, alto]).convierte()
-        rect = imagen.obtener_rect()
+    def obtener_image(self, x, y, ancho, alto):
+        """Extrae la image de las plantillas"""
+        image = pg.Superficie([ancho, alto]).convierte()
+        rect = image.obtener_rect()
 
-        imagen.blit(self.sprite_sheet, (0, 0), (x, y, ancho, alto))
-        imagen.clave_color(c.NEGRO)
-        imagen = pg.transforma.escala(imagen,
+        image.blit(self.sprite_sheet, (0, 0), (x, y, ancho, alto))
+        image.set_colorkey(c.NEGRO)
+        image = pg.transform.scale(image,
                                    (int(rect.ancho*c.TAMAÑO_BLOQUE_MULTIPLICADOR),
                                     int(rect.alto*c.TAMAÑO_BLOQUE_MULTIPLICADOR)))
-        return imagen
+        return image
 
 
     def crear_Digito_lista(self):
@@ -70,15 +70,15 @@ class Puntaje(object):
         self.Digito_grupo = pg.sprite.grupo()
 
         for Digito in self.Puntaje_string:
-            self.Digito_lista.adjuntar(Digito(self.imagen_dic[Digito]))
+            self.Digito_lista.adjuntar(Digito(self.image_dic[Digito]))
 
-        self.establecer_rects_imagenes()
+        self.establecer_rects_imagees()
 
 
-    def establecer_rects_imagenes(self):
-        """Establece los atributos rect para cada imagen self.imagen_lista"""
+    def establecer_rects_imagees(self):
+        """Establece los atributos rect para cada image self.image_lista"""
         for i, Digito in enumerate(self.Digito_lista):
-            Digito.rect = Digito.imagen.obtener_rect()
+            Digito.rect = Digito.image.obtener_rect()
             Digito.rect.x = self.x + (i * 10)
             Digito.rect.y = self.y
 
@@ -99,7 +99,7 @@ class Puntaje(object):
     def draw(self, pantalla):
         """Dibuja números de puntuación en la pantalla"""
         for Digito in self.Digito_lista:
-            pantalla.blit(Digito.imagen, Digito.rect)
+            pantalla.blit(Digito.image, Digito.rect)
 
 
     def check_eliminar_puntaje_flotante(self, Puntaje_lista, nivel_info):
