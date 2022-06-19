@@ -375,8 +375,8 @@ class Nivel1(herramientas._Estado):
         self.mario.actualizar(llaves, self.informacion_juego, self.grupo_encendido)
         for puntaje in self.lista_puntaje_movimiento:
             puntaje.actualizar(self.lista_puntaje_movimiento, self.informacion_juego)
-        if self.puntuacion_bandera:
-            self.puntuacion_bandera.actualizar(None, self.informacion_juego)
+        if self.puntaje_bandera:
+            self.puntaje_bandera.actualizar(None, self.informacion_juego)
             self.marca_agregar_puntaje_bandera()
         self.grupo_cajas_monedas.actualizar(self.informacion_juego)
         self.grupo_asta_bandera.actualizar(self.informacion_juego)
@@ -399,8 +399,8 @@ class Nivel1(herramientas._Estado):
         self.mario.actualizar(llaves, self.informacion_juego, self.grupo_encendido)
         for puntaje in self.lista_puntaje_movimiento:
             puntaje.actualizar(self.lista_puntaje_movimiento, self.informacion_juego)
-        if self.puntuacion_bandera:
-            self.puntuacion_bandera.actualizar(None, self.informacion_juego)
+        if self.puntaje_bandera:
+            self.puntaje_bandera.actualizar(None, self.informacion_juego)
             self.marca_agregar_puntaje_bandera()
         self.grupo_asta_bandera.actualizar()
         self.puntos_control()
