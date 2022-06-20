@@ -405,17 +405,17 @@ class Nivel1(herramientas._Estado):
         self.grupo_asta_bandera.actualizar()
         self.puntos_control()
         self.grupo_enemigo.actualizar(self.informacion_juego)
-        self.grupo_sprites_mueriendo.actualizar(self.informacion_juego, self.ventana_grafica)
+        self.grupo_sprites_mueriendo.actualizar(self.informacion_juego, self.visor)
         self.coraza_grupo.actualizar(self.informacion_juego)
         self.ladrillo_grupo.actualizar()
         self.caja_monedas_grupo.actualizar(self.informacion_juego)
-        self.grupo_encendido.actualizar(self.informacion_juego, self.ventana_grafica)
-        self.coin_group.actualizar(self.informacion_juego, self.ventana_grafica)
+        self.grupo_encendido.actualizar(self.informacion_juego, self.visor)
+        self.coin_group.actualizar(self.informacion_juego, self.visor)
         self.grupo_piezas_ladrillos.actualizar()
         self.ajustar_posicion_sprite()
         self.comprobacion_mario_estado_transicion()
         self.comprobacion_muerte_mario()
-        self.actualizar_ventana_grafica()
+        self.actualizar_visor()
         self.pantalla_informacion_superior.actualizar(self.informacion_juego, self.mario)
 
     def puntos_control(self):
@@ -429,7 +429,7 @@ class Nivel1(herramientas._Estado):
             for i in range(1,11):
                 if control.nombre == str(i):
                     for indice, enemigo in enumerate(self.enemigo_grupo_lista[i -1]):
-                        enemigo.rect.x = self.ventana_grafica.derecha + (indice * 60)
+                        enemigo.rect.x = self.visor.derecha + (indice * 60)
                     self.grupo_enemigo.add(self.enemigo_grupo_lista[i-1])
 
             if control.nombre == '11':
