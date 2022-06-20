@@ -20,8 +20,8 @@ PANTALLA_RECTANGULAR = PANTALLA.get_rect()
 
 
 
-MUSICA = herramientas.load_all_music(os.path.join("Recursos","musica"))
-GFX   = herramientas.load_all_gfx(os.path.join("Recursos","Graficos"))
-SFX   = herramientas.load_all_sfx(os.path.join("Recursos","sonidos"))
+GFX   = herramientas.cargar_todos_gfx(os.path.join("Recursos","Graficos"))
+SFX   = herramientas.cargar_todos_sfx(os.path.join("Recursos","sonidos"))
+MUSICA = herramientas.cargar_sonidos(os.path.join("Recursos","musica"))
 
 
