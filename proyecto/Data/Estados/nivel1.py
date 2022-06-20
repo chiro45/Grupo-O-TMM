@@ -155,7 +155,7 @@ class Nivel1(herramientas._Estado):
         pasar los ladrillos"""
         self.moneda_grupo = pg.sprite.Grupo()
         self.superpoder_grupo = pg.sprite.Grupo()
-        self.ladrillo_pieces_grupo = pg.sprite.Grupo()
+        self.grupo_piezas_ladrillos = pg.sprite.Grupo()
 
         ladrillo1  = ladrillos.ladrillo(858,  365)
         ladrillo2  = ladrillos.ladrillo(944,  365)
