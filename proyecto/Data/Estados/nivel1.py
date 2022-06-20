@@ -412,7 +412,7 @@ class Nivel1(herramientas._Estado):
         self.grupo_encendido.actualizar(self.informacion_juego, self.ventana_grafica)
         self.coin_group.actualizar(self.informacion_juego, self.ventana_grafica)
         self.grupo_piezas_ladrillos.actualizar()
-        self.ajustar_posicion_ladrillos()
+        self.ajustar_posicion_sprite()
         self.comprobacion_mario_estado_transicion()
         self.comprobacion_muerte_mario()
         self.actualizar_ventana_grafica()
