@@ -417,3 +417,72 @@ class Nivel1(herramientas._Estado):
         self.comprobacion_muerte_mario()
         self.actualizar_ventana_grafica()
         self.pantalla_informacion_superior.actualizar(self.informacion_juego, self.mario)
+
+    def puntos_control(self):
+        """Detectar si se produce una colisión de puntos de control, eliminar puntos de control,
+        agregar enemigos a self.enemy_group"""
+        control = pg.sprite.spritecollideany(self.mario,
+                                                 self.pcontrol_punto_grupo)
+        if control:
+            control.kill()
+
+            for i in range(1,11):
+                if control.nombre == str(i):
+                    for indice, enemigo in enumerate(self.enemigo_grupo_lista[i -1]):
+                        enemigo.rect.x = self.ventana_grafica.derecha + (indice * 60)
+                    self.grupo_enemigo.add(self.enemigo_grupo_lista[i-1])
+
+            if control.nombre == '11':
+                self.mario.estado = c.ASTA_DE_BANDERA
+                self.mario.invincible = False
+                self.mario.asta_bandera_derecha = control.rect.derecha
+                if self.mario.rect.bottom < self.bandera.rect.y:
+                    self.mario.rect.bottom = self.bandera.rect.y
+                self.bandera.estado = c.BAJO_MASTIL
+                self.crear_puntos_bandera()
+
+            elif control.nombre == '12':
+                self.estado = c.EN_CASTILLO
+                self.mario.matar()
+                self.mario.estado == c.PARARSE
+                self.mario.en_castillo = True
+                self.pantalla_informacion_superior.estado = c.CUENTA_REGRESIVA_RAPIDA
+
+
+            elif control.nombre == 'hongo_secreto' and self.mario.y_vel < 0:
+                caja_de_setas = caja_de_monedas.Caja_de_monedas(control.rect.x,
+                                        control.rect.bottom - 40,
+                                        'hongo',
+                                        self.grupo_encendido)
+                caja_de_setas.empezar_golpe(self.lista_puntaje_movimiento)
+                self.grupo_cajas_monedas.add(caja_de_setas)
+
+                self.mario.y_vel = 7
+                self.mario.rect.y = caja_de_setas.rect.bottom
+                self.mario.estado = c.CAERSE
+
+            self.mario_y_grupo_enemigo.add(self.grupo_enemigo)
+
+
+    def crear_puntos_bandera(self):
+        """Crea los puntos que aparecen cuando Mario toca el
+        asta de bandera"""
+        x = 8518
+        y = c.ALTURA_DE_SUELO - 60
+        mario_bottom = self.mario.rect.bottom
+
+        if mario_bottom > (c.ALTURA_DE_SUELO - 40 - 40):
+            self.puntaje_bandera = puntaje.Puntaje(x, y, 100, True)
+            self.puntaje_bandera_total = 100
+        elif mario_bottom > (c.ALTURA_DE_SUELO - 40 - 160):
+            self.puntaje_bandera = puntaje.Puntaje(x, y, 400, True)
+            self.puntaje_bandera_total = 400
+        elif mario_bottom > (c.ALTURA_DE_SUELO - 40 - 240):
+            self.puntaje_bandera = puntaje.Puntaje(x, y, 800, True)
+            self.puntaje_bandera_total = 800
+        elif mario_bottom > (c.ALTURA_DE_SUELO - 40 - 360):
+            self.puntaje_bandera = puntaje.Puntaje(x, y, 2000, True)
+            self.puntaje_bandera_total = 2000
+        else:
+            self.puntaje_bandera = puntaje.Puntaje(x, y, 5000, True)
+            self.puntaje_bandera_total = 5000
