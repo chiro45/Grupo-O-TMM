@@ -1,14 +1,14 @@
 
 import pygame as pg
-from . import setup
+from . import configuracion
 from . import constantes as c
 
 class Sonido(object):
     "===========Manjejador de eventos de todos los sonidos del juego==========="
     def __init__(self, informarcion_general):
         "===========Inicializamos las clases==========="
-        self.diccionario_fx= setup.SFX
-        self.diccionario_music = setup.MUSIC
+        self.diccionario_fx= configuracion.SFX
+        self.diccionario_music = configuracion.MUSIC
         self.informarcion_general= informarcion_general
         self.informacion_juego = informarcion_general.info_juego
         self.configuracion_mezclador_musica()
