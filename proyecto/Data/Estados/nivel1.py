@@ -752,3 +752,107 @@ class Nivel1(herramientas._Estado):
             self.mario.y_vel = 0
             self.mario.rect.abajo = caja_monedas.rect.arriba
             self.mario.estado = c.CAMINAR
+
+    def ajustar_mario_para_colisiones_ladrillos_y(self, ladrillo):
+        """Mario colisiona con ladrillos en el eje y"""
+        if self.mario.rect.y > ladrillo.rect.y:
+            if ladrillo.estado == c.LADRILLO_EN_REPOSO:
+                if self.mario.grande and ladrillo.contenido is None:
+                    configuracion.SFX['aplastar_ladrillos'].jugar()
+                    self.comprueba_enemigo_en_ladrillo(ladrillo)
+                    ladrillo.matar()
+                    self.grupo_piezas_ladrillo.add(
+                        ladrillos.PiezasLadrillo(ladrillo.rect.x,
+                                               ladrillo.rect.y - (ladrillo.rect.altura/2),
+                                               -2, -12),
+                        ladrillos.PiezasLadrillo(ladrillo.rect.derecha,
+                                               ladrillo.rect.y - (ladrillo.rect.altura/2),
+                                               2, -12),
+                        ladrillos.PiezasLadrillo(ladrillo.rect.x,
+                                               ladrillo.rect.y,
+                                               -2, -6),
+                        ladrillos.PiezasLadrillo(ladrillo.rect.derecha,
+                                               ladrillo.rect.y,
+                                               2, -6))
+                else:
+                    configuracion.SFX['golpe'].jugar()
+                    if ladrillo.total_monedas > 0:
+                        self.informacion_juego[c.TOTAL_MONEDAS] += 1
+                        self.informacion_juego[c.PUNTAJE] += 200
+                    self.comprueba_enemigo_en_ladrillo(ladrillo)
+                    ladrillo.empezar_golpe(self.lista_puntaje_movil)
+            elif ladrillo.estado == c.ABIERTA:
+                configuracion.SFX['golpe'].jugar()
+            self.mario.y_vel = 7
+            self.mario.rect.y = ladrillo.rect.abajo
+            self.mario.estado = c.CAERSE
+
+        else:
+            self.mario.y_vel = 0
+            self.mario.rect.abajo = ladrillo.rect.arriba
+            self.mario.estado = c.CAMINAR
+
+
+    def comprueba_enemigo_en_ladrillo(self, ladrillo):
+        """Mata al enemigo si está en un ladrillo golpeado o roto"""
+        ladrillo.rect.y -= 5
+
+        enemigo = pg.sprite.spritecollideany(ladrillo, self.grupo_enemigo)
+
+        if enemigo:
+            configuracion.SFX['patada'].jugar()
+            self.informacion_juego[c.PUNTAJE] += 100
+            self.lista_puntaje_movil.adjuntar(
+                puntaje.Puntaje(enemigo.rect.centro_x - self.visor.x,
+                            enemigo.rect.y,
+                            100))
+            enemigo.matar()
+            self.sprites_sobre_muerte_en_grupo.add(enemigo)
+            if self.mario.rect.centro_x > ladrillo.rect.centro_x:
+                enemigo.empezar_salto_de_muerte('derecha')
+            else:
+                enemigo.empezar_salto_de_muerte('izquierda')
+
+        ladrillo.rect.y += 5
+
+
+
+    def ajustar_mario_para_colisiones_tuberiaTierra_y(self, colisionador):
+        """Mario choca con tuberías en el eje y"""
+        if colisionador.rect.abajo > self.mario.rect.abajo:
+            self.mario.y_vel = 0
+            self.mario.rect.abajo = colisionador.rect.arriba
+            if self.mario.estado == c.FIN_DEL_NIVEL:
+                self.mario.estado = c.CAMINANDO_AL_CASTILLO
+            else:
+                self.mario.estado = c.CAMINAR
+        elif colisionador.rect.arriba < self.mario.rect.arriba:
+            self.mario.y_vel = 7
+            self.mario.rect.arriba = colisionador.rect.abajo
+            self.mario.estado = c.CAERSE
+
+
+    def prueba_si_mario_cae(self):
+        """Cambia a Mario a un estado de CAÍDA si hay más de un píxel por encima de una tubería,
+        suelo, escalón o caja"""
+        self.mario.rect.y += 1
+        grupo_prueba_de_colision = pg.sprite.Group(self.terreno_paso_grupo_tuberia,
+                                                 self.ladrillo_grupo,
+                                                 self.caja_monedas_grupo)
+
+
+        if pg.sprite.spritecollideany(self.mario, grupo_prueba_de_colision) is None:
+            if self.mario.estado != c.SALTO \
+                and self.mario.estado != c.SALTO_MORTAL \
+                and self.mario.estado != c.PEQUENIO_A_GRANDE \
+                and self.mario.estado != c.GRANDE_PARA_DISPARAR \
+                and self.mario.estado != c.GRANDE_A_PEQUENIO \
+                and self.mario.estado != c.ASTA_DE_BANDERA \
+                and self.mario.estado != c.CAMINANDO_AL_CASTILLO \
+                and self.mario.estado != c.FIN_DEL_NIVEL:
+                self.mario.estado = c.FALL
+            elif self.mario.estado == c.CAMINANDO_AL_CASTILLO or \
+                self.mario.estado == c.FIN_DEL_NIVEL:
+                self.mario.estado = c.FIN_DEL_NIVEL
+
+        self.mario.rect.y -= 1
