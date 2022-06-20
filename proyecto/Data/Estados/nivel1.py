@@ -630,3 +630,125 @@ class Nivel1(herramientas._Estado):
             self.mario.rect.izquierda = colisionador.rect.derecha
 
         self.mario.x_vel = 0
+
+    def ajustar_mario_para_x_colisiones_coraza(self, coraza):
+        """Trata con Mario si golpea un proyectil que se mueve en el eje x"""
+        if coraza.estado == c.SALTO_SOBRE:
+            if self.mario.rect.x < coraza.rect.x:
+                self.informacion_juego[c.PUNTAJE] += 400
+                self.lista_puntaje_movil.adjuntar(
+                    puntaje.Puntaje(coraza.rect.centro_x - self.visor.x,
+                                coraza.rect.y,
+                                400))
+                self.mario.rect.derecha = coraza.rect.izquierda
+                coraza.direccion = c.DERECHA
+                coraza.x_vel = 5
+                coraza.rect.x += 5
+
+            else:
+                self.mario.rect.izquierda = coraza.rect.derecha
+                coraza.direccion = c.IZQUIERDA
+                coraza.x_vel = -5
+                coraza.rect.x += -5
+
+            coraza.estado = c.DESLICE_DE_CAPARAZON
+
+        elif coraza.estado == c.DESLICE_DE_CAPARAZON:
+            if self.mario.grande and not self.mario.invincible:
+                self.mario.estado = c.GRANDE_A_PEQUENIO
+            elif self.mario.invincible:
+                self.informacion_juego[c.PUNTAJE] += 200
+                self.lista_puntaje_movil.adjuntar(
+                    puntaje.Puntaje(coraza.rect.derecha - self.visor.x,
+                                coraza.rect.y, 200))
+                coraza.matar()
+                self.sprites_sobre_muerte_en_grupo.add(coraza)
+                coraza.empezar_salto_de_muerte(c.DERECHA)
+            else:
+                if not self.mario.herida_invencible and not self.mario.invincible:
+                    self.estado = c.FRIZADO
+                    self.mario.empezar_salto_de_muerte(self.informacion_juego)
+
+
+    def comprobar_mario_y_colisiones(self):
+        """Comprueba si hay colisiones cuando Mario se mueve a lo largo del eje y"""
+        paso_tierra_o_tuberia = pg.sprite.spritecollideany(self.mario, self.terreno_paso_grupo_tuberia)
+        enemigo = pg.sprite.spritecollideany(self.mario, self.grupo_enemigo)
+        coraza = pg.sprite.spritecollideany(self.mario, self.coraza_grupo)
+        ladrillo = pg.sprite.spritecollideany(self.mario, self.ladrillo_grupo)
+        caja_monedas = pg.sprite.spritecollideany(self.mario, self.caja_monedas_grupo)
+        encender = pg.sprite.spritecollideany(self.mario, self.superpoder_grupo)
+
+        ladrillo, caja_monedas = self.prevenir_conflicto_de_colision(ladrillo, caja_monedas)
+
+        if caja_monedas:
+            self.ajustar_mario_para_colisiones_caja_monedas_y(caja_monedas)
+
+        elif ladrillo:
+            self.ajustar_mario_para_colisiones_ladrillos_y(ladrillo)
+
+        elif paso_tierra_o_tuberia:
+            self.ajustar_mario_para_colisiones_tuberiaTierra_y(paso_tierra_o_tuberia)
+
+        elif enemigo:
+            if self.mario.invincible:
+                configuracion.SFX['patada'].jugar()
+                enemigo.matar()
+                self.sprites_sobre_muerte_en_grupo.add(enemigo)
+                enemigo.empezar_salto_de_muerte(c.DERECHA)
+            else:
+                self.ajustar_mario_para_colisiones_enemigas_y(enemigo)
+
+        elif coraza:
+            self.ajustar_mario_para_colisiones_coraza_y(coraza)
+
+        elif encender:
+            if encender.nombre == c.ESTRELLA:
+                configuracion.SFX['encender'].jugar()
+                encender.matar()
+                self.mario.invincible = True
+                self.mario.invincible_start_timer = self.tiempo_actual
+
+        self.prueba_si_mario_cae()
+
+
+    def prevenir_conflicto_de_colision(self, obstaculo1, obstaculo2):
+        """Permite colisiones solo para el elemento más cercano a marios centerx"""
+        if obstaculo1 and obstaculo2:
+            distancia_obstaculo1 = self.mario.rect.centro_x - obstaculo1.rect.centro_x
+            if distancia_obstaculo1 < 0:
+                distancia_obstaculo1 *= -1
+            distancia_obstaculo2 = self.mario.rect.centro_x - obstaculo2.rect.centro_x
+            if distancia_obstaculo2 < 0:
+                distancia_obstaculo2 *= -1
+
+            if distancia_obstaculo1 < distancia_obstaculo2:
+                obstaculo2 = False
+            else:
+                obstaculo1 = False
+
+        return obstaculo1, obstaculo2
+
+
+    def ajustar_mario_para_colisiones_caja_monedas_y(self, caja_monedas):
+        """Mario colisiona con cajas de monedas en el eje y"""
+        if self.mario.rect.y > caja_monedas.rect.y:
+            if caja_monedas.estado == c.LADRILLO_EN_REPOSO:
+                if caja_monedas.contenido == c.MONEDA:
+                    self.informacion_juego[c.PUNTAJE] += 200
+                    caja_monedas.empezar_golpe(self.lista_puntaje_movil)
+                    if caja_monedas.contenido == c.MONEDA:
+                        self.informacion_juego[c.TOTAL_MONEDAS] += 1
+                else:
+                    caja_monedas.empezar_golpe(self.lista_puntaje_movil)
+
+            elif caja_monedas.estado == c.ABIERTA:
+                pass
+            configuracion.SFX['golpe'].jugar()
+            self.mario.y_vel = 7
+            self.mario.rect.y = caja_monedas.rect.bottom
+            self.mario.estado = c.CAERSE
+        else:
+            self.mario.y_vel = 0
+            self.mario.rect.abajo = caja_monedas.rect.arriba
+            self.mario.estado = c.CAMINAR
