@@ -1,4 +1,5 @@
 
+from re import X
 import pygame as pg
 from .. import configuracion
 from .. import constantes as c
@@ -329,6 +330,127 @@ class InformacionGeneral(object):
         self.imagen_contador_monedas = []
 
         self.create_etiqueta(self.imagen_contador_monedas, cadena_moneda, x, y)
+    
+
+    def dibuja(self, surface):
+        """Dibuja información general basada en el estado"""
+        if self.estado == c.MENU_PRINCIPAL:
+            self.dibuja_info_menu_prin(surface)
+        elif self.estado == c.PANTALLA_DE_CARGA:
+            self.dibuja_info_pantalla_carga(surface)
+        elif self.estado == c.NIVEL:
+            self.dibuja_info_nivel_pantalla(surface)
+        elif self.estado == c.JUEGO_TERMINADO:
+            self.dibuja_info_juego_terminado_pant(surface)
+        elif self.estado == c.CUENTA_REGRESIVA_RAPIDA:
+            self.dibuja_info_nivel_pantalla(surface)
+        elif self.estado == c.FINAL_DEL_NIVEL:
+            self.dibuja_info_nivel_pantalla(surface)
+        elif self.estado == c.TIEMPO_TERMINADO:
+            self.dibuja_info_tiempo_terminado_pant(surface)
+        else:
+            pass
+
+
+
+    def dibuja_info_menu_prin(self, surface):
+        """Dibuja información para el menú principal"""
+        for info in self.imagen_puntaje:
+            surface.blit(info.image, info.rect)
+
+        for label in self.main_menu_labels:
+            for letter in label:
+                surface.blit(letter.image, letter.rect)
+
+        for character in self.imagen_contador_monedas:
+            surface.blit(character.image, character.rect)
+
+        for label in self.lista_etiqueta:
+            for letter in label:
+                surface.blit(letter.image, letter.rect)
+
+        surface.blit(self.efecto_moneda.image, self.efecto_moneda.rect)
+
+
+    def dibuja_info_pantalla_carga(self, surface):
+        """Dibuja información para la pantalla de carga"""
+        for info in self.imagen_puntaje:
+            surface.blit(info.image, info.rect)
+
+        for word in self.etiqueta_central:
+            for letter in word:
+                surface.blit(letter.image, letter.rect)
+
+        for word in self.etiqueta_total_vidas:
+            surface.blit(word.image, word.rect)
+
+        surface.blit(self.mario_image, self.mario_rect)
+        surface.blit(self.imagen_tiempo_vida, self.life_times_rect)
+
+        for character in self.imagen_contador_monedas:
+            surface.blit(character.image, character.rect)
+
+        for label in self.lista_etiqueta:
+            for letter in label:
+                surface.blit(letter.image, letter.rect)
+
+        surface.blit(self.efecto_moneda.image, self.efecto_moneda.rect)
+
+
+    def dibuja_info_nivel_pantalla(self, surface):
+        """Dibuja información durante el juego regular"""
+        for info in self.imagen_puntaje:
+            surface.blit(info.image, info.rect)
+
+        for digit in self.imagen_cuentatras:
+                surface.blit(digit.image, digit.rect)
+
+        for character in self.imagen_contador_monedas:
+            surface.blit(character.image, character.rect)
+
+        for label in self.lista_etiqueta:
+            for letter in label:
+                surface.blit(letter.image, letter.rect)
+
+        surface.blit(self.efecto_moneda.image, self.efecto_moneda.rect)
+
+
+    def dibujar_info_juego_terminado_pant(self, surface):
+        """Dibuja información cuando termina el juego"""
+        for info in self.imagen_puntaje:
+            surface.blit(info.image, info.rect)
+
+        for word in self.etiqueta_juego_terminado:
+            for letter in word:
+                surface.blit(letter.image, letter.rect)
+
+        for character in self.imagen_contador_monedas:
+            surface.blit(character.image, character.rect)
+
+        for label in self.lista_etiqueta:
+            for letter in label:
+                surface.blit(letter.image, letter.rect)
+
+        surface.blit(self.efecto_moneda.image, self.efecto_moneda.rect)
+
+
+    def dibuja_info_tiempo_terminado_pant(self, surface):
+        """Extrae información cuando está en la pantalla de tiempo de espera"""
+        for info in self.imagen_puntaje:
+            surface.blit(info.image, info.rect)
+
+        for word in self.time_out_label:
+            for letter in word:
+                surface.blit(letter.image, letter.rect)
+
+        for character in self.imagen_contador_monedas:
+            surface.blit(character.image, character.rect)
+
+        for label in self.lista_etiqueta:
+            for letter in label:
+                surface.blit(letter.image, letter.rect)
+
+        surface.blit(self.efecto_moneda.image, self.efecto_moneda.rect)
 
 
 
