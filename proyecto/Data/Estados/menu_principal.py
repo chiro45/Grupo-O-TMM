@@ -2,7 +2,7 @@
 
 import pygame as pg
 from .. import configuracion, herramientas
-from .. import constants as c
+from .. import constantes as c
 from .. Componentes import info, mario
 
 
@@ -10,7 +10,8 @@ class Menu(herramientas._State):
     def __init__(self):
         """Inicializa el estado"""
         herramientas._State.__init__(self)
-        persistir = {c.TOTAL_MONEDAS: 0,
+        persistir = {
+                   c.TOTAL_MONEDAS: 0,
                    c.PUNTAJE: 0,
                    c.VIDAS: 3,
                    c.MEJOR_PUNTAJE: 0,
