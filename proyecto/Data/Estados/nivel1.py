@@ -410,7 +410,7 @@ class Nivel1(herramientas._Estado):
         self.ladrillo_grupo.actualizar()
         self.caja_monedas_grupo.actualizar(self.informacion_juego)
         self.superpoder_grupo.actualizar(self.informacion_juego, self.visor)
-        self.coin_group.actualizar(self.informacion_juego, self.visor)
+        self.moneda_grupo.actualizar(self.informacion_juego, self.visor)
         self.grupo_piezas_ladrillos.actualizar()
         self.ajustar_posicion_sprite()
         self.comprobacion_mario_estado_transicion()
