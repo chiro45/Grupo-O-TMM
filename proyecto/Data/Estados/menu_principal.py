@@ -2,7 +2,7 @@
 
 import pygame as pg
 from .. import configuracion, herramientas
-from .. import constants as c
+from .. import constantes as c
 from .. Componentes import info, mario
 
 
