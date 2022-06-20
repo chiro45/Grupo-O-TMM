@@ -22,6 +22,6 @@ Ya que el tiempo del proyecto nos desborda del tiempo planificado.
     Al ser un juego tan icónico, podemos encontrar muchos de los recursos de modelos hechos por la comunidad(sprites, sonidos, musica, etc...),
 y tomarlos para luego, lo que nos facilitara enfocarnos solo en la programación de este mismo.
     Como repositorio de este trabajos usuariamos gitHub, con el sistema de control de versiones Git, estos mismos fueron planteados
-en la materia, este seria el link: "https://github.com/chiro45/MetodologiaExamenIntegrador".
+en la materia, este seria el link: "https://github.com/chiro45/Grupo-O-TM".
 
 
