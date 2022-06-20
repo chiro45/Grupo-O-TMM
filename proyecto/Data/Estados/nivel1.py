@@ -436,8 +436,8 @@ class Nivel1(herramientas._Estado):
                 self.mario.estado = c.ASTA_DE_BANDERA
                 self.mario.invincible = False
                 self.mario.asta_bandera_derecha = control.rect.derecha
-                if self.mario.rect.bottom < self.bandera.rect.y:
-                    self.mario.rect.bottom = self.bandera.rect.y
+                if self.mario.rect.abajo < self.bandera.rect.y:
+                    self.mario.rect.abajo = self.bandera.rect.y
                 self.bandera.estado = c.BAJO_MASTIL
                 self.crear_puntos_bandera()
 
@@ -451,14 +451,14 @@ class Nivel1(herramientas._Estado):
 
             elif control.nombre == 'hongo_secreto' and self.mario.y_vel < 0:
                 caja_de_setas = caja_de_monedas.Caja_de_monedas(control.rect.x,
-                                        control.rect.bottom - 40,
+                                        control.rect.abajo - 40,
                                         'hongo',
                                         self.superpoder_grupo)
                 caja_de_setas.empezar_golpe(self.lista_puntaje_movil)
                 self.caja_monedas_grupo.add(caja_de_setas)
 
                 self.mario.y_vel = 7
-                self.mario.rect.y = caja_de_setas.rect.bottom
+                self.mario.rect.y = caja_de_setas.rect.abajo
                 self.mario.estado = c.CAERSE
 
             self.mario_y_grupo_enemigo.add(self.grupo_enemigo)
@@ -469,18 +469,18 @@ class Nivel1(herramientas._Estado):
         asta de bandera"""
         x = 8518
         y = c.ALTURA_DE_SUELO - 60
-        mario_bottom = self.mario.rect.bottom
+        mario_abajo = self.mario.rect.abajo
 
-        if mario_bottom > (c.ALTURA_DE_SUELO - 40 - 40):
+        if mario_abajo > (c.ALTURA_DE_SUELO - 40 - 40):
             self.puntaje_bandera = puntaje.Puntaje(x, y, 100, True)
             self.puntaje_bandera_total = 100
-        elif mario_bottom > (c.ALTURA_DE_SUELO - 40 - 160):
+        elif mario_abajo > (c.ALTURA_DE_SUELO - 40 - 160):
             self.puntaje_bandera = puntaje.Puntaje(x, y, 400, True)
             self.puntaje_bandera_total = 400
-        elif mario_bottom > (c.ALTURA_DE_SUELO - 40 - 240):
+        elif mario_abajo > (c.ALTURA_DE_SUELO - 40 - 240):
             self.puntaje_bandera = puntaje.Puntaje(x, y, 800, True)
             self.puntaje_bandera_total = 800
-        elif mario_bottom > (c.ALTURA_DE_SUELO - 40 - 360):
+        elif mario_abajo > (c.ALTURA_DE_SUELO - 40 - 360):
             self.puntaje_bandera = puntaje.Puntaje(x, y, 2000, True)
             self.puntaje_bandera_total = 2000
         else:
