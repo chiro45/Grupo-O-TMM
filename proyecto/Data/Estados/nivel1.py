@@ -35,7 +35,7 @@ class Nivel1(herramientas._Estado):
         self.puntaje_bandera = None
         self.puntaje_bandera_total = 0
 
-        self.listaa_puntaje_movil = []
+        self.lista_puntaje_movil = []
         self.informacion_pantalla_superior = informacion.informacionAerea(self.informacion_juego, c.nivel)
         self.administracion_sonido = sonido_juego.sonidos(self.informacion_pantalla_superior)
 
@@ -373,8 +373,8 @@ class Nivel1(herramientas._Estado):
     def actualizar_en_estado_transicion(self, llaves):
         """Actualiza a mario en un estado de transición. Comprueba si deja el estado de transición o muere para volver a cambiar el estado del nivel"""
         self.mario.actualizar(llaves, self.informacion_juego, self.grupo_encendido)
-        for puntaje in self.lista_puntaje_movimiento:
-            puntaje.actualizar(self.lista_puntaje_movimiento, self.informacion_juego)
+        for puntaje in self.lista_puntaje_movil:
+            puntaje.actualizar(self.lista_puntaje_movil, self.informacion_juego)
         if self.puntaje_bandera:
             self.puntaje_bandera.actualizar(None, self.informacion_juego)
             self.marca_agregar_puntaje_bandera()
@@ -397,8 +397,8 @@ class Nivel1(herramientas._Estado):
     def actualizar_sprites(self, llaves):
         """Actualiza la ubicación de todos los sprites en la pantalla."""
         self.mario.actualizar(llaves, self.informacion_juego, self.grupo_encendido)
-        for puntaje in self.lista_puntaje_movimiento:
-            puntaje.actualizar(self.lista_puntaje_movimiento, self.informacion_juego)
+        for puntaje in self.lista_puntaje_movil:
+            puntaje.actualizar(self.lista_puntaje_movil, self.informacion_juego)
         if self.puntaje_bandera:
             self.puntaje_bandera.actualizar(None, self.informacion_juego)
             self.marca_agregar_puntaje_bandera()
@@ -454,7 +454,7 @@ class Nivel1(herramientas._Estado):
                                         control.rect.bottom - 40,
                                         'hongo',
                                         self.grupo_encendido)
-                caja_de_setas.empezar_golpe(self.lista_puntaje_movimiento)
+                caja_de_setas.empezar_golpe(self.lista_puntaje_movil)
                 self.caja_monedas_grupo.add(caja_de_setas)
 
                 self.mario.y_vel = 7
