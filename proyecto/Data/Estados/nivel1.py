@@ -486,3 +486,147 @@ class Nivel1(herramientas._Estado):
         else:
             self.puntaje_bandera = puntaje.Puntaje(x, y, 5000, True)
             self.puntaje_bandera_total = 5000
+
+    def ajustar_posicion_sprite(self):
+        """Ajusta los sprites por sus velocidades x e y y colisiones"""
+        self.ajustar_posicion_mario()
+        self.ajustar_posicion_enemigo()
+        self.ajustar_posicion_caparazon()
+        self.ajustar_posicion_encendido()
+
+
+    def ajustar_posicion_mario(self):
+        """Ajusta la posición de Mario en función de sus velocidades x, y y
+        posibles colisiones"""
+        self.ultima_posicion_x = self.mario.rect.derecha
+        self.mario.rect.x += round(self.mario.x_vel)
+        self.comprobar_mario_x_colisiones()
+
+        if self.mario.en_estado_transicion == False:
+            self.mario.rect.y += round(self.mario.y_vel)
+            self.comprobar_mario_y_colisiones()
+
+        if self.mario.rect.x < (self.ventana_grafica.x + 5):
+            self.mario.rect.x = (self.ventana_grafica.x + 5)
+
+
+    def comprobar_mario_x_colisiones(self):
+        """Compruebe si hay colisiones después de mover a Mario en el eje x"""
+        colisionador = pg.sprite.spritecollideany(self.mario, self.terreno_paso_grupo_tuberia)
+        caja_monedas = pg.sprite.spritecollideany(self.mario, self.caja_monedas_grupo)
+        ladrillo = pg.sprite.spritecollideany(self.mario, self.ladrillo_grupo)
+        enemigo = pg.sprite.spritecollideany(self.mario, self.grupo_enemigo)
+        coraza = pg.sprite.spritecollideany(self.mario, self.coraza_grupo)
+        encender = pg.sprite.spritecollideany(self.mario, self.superpoder_grupo)
+
+        if caja_monedas:
+            self.ajustar_mario_para_x_colisiones(caja_monedas)
+
+        elif ladrillo:
+            self.ajustar_mario_para_x_colisiones(ladrillo)
+
+        elif colisionador:
+            self.ajustar_mario_para_x_colisiones(colisionador)
+
+        elif enemigo:
+            if self.mario.invincible:
+                configuracion.SFX['kick'].jugar()
+                self.informacion_juego[c.PUNTAJE] += 100
+                self.lista_puntaje_movil.adjuntar(
+                    puntaje.Puntaje(self.mario.rect.derecha - self.visor.x,
+                                self.mario.rect.y, 100))
+                enemigo.matar()
+                enemigo.empezar_salto_de_muerte(c.DERECHA)
+                self.sprites_sobre_muerte_en_grupo.add(enemigo)
+            elif self.mario.grande:
+                configuracion.SFX['tubo'].jugar()
+                self.mario.fuego = False
+                self.mario.y_vel = -1
+                self.mario.estado = c.GRANDE_A_PEQUENIO
+                self.convertir_floresFuego_en_hongos()
+            elif self.mario.herida_invencible:
+                pass
+            else:
+                self.mario.empezar_salto_de_muerte(self.informacion_juego)
+                self.estado = c.FRIZADO
+
+        elif coraza:
+            self.ajustar_mario_para_x_colisiones_coraza(coraza)
+
+        elif encender:
+            if encender.nombre == c.ESTRELLA:
+                self.informacion_juego[c.PUNTAJE] += 1000
+
+                self.lista_puntaje_movil.adjuntar(
+                    puntaje.Puntaje(self.mario.rect.centro_x - self.visor.x,
+                                self.mario.rect.y, 1000))
+                self.mario.invincible = True
+                self.mario.temporizador_inicio_invencible = self.tiempo_actual
+            elif encender.name == c.HONGOS:
+                configuracion.SFX['encender'].jugar()
+                self.informacion_juego[c.PUNTAJE] += 1000
+                self.lista_puntaje_movil.adjuntar(
+                    puntaje.Puntaje(self.mario.rect.centro_x - self.visor.x,
+                                self.mario.rect.y - 20, 1000))
+
+                self.mario.y_vel = -1
+                self.mario.estadp = c.PEQUENIO_A_GRANDE
+                self.mario.en_estado_transicion = True
+                self.convertir_hongos_en_floresFuego()
+            elif encender.nombre == c.HONGO_DE_VIDA:
+                self.lista_puntaje_movil.adjuntar(
+                    puntaje.Puntaje(encender.rect.derecha - self.visor.x,
+                                encender.rect.y,
+                                c.UNA_VIDA))
+
+                self.informacion_juego[c.VIDAS] += 1
+                configuracion.SFX['una_vida'].jugar()
+            elif encender.nombre == c.FLOR_FUEGO:
+                configuracion.SFX['encender'].jugar()
+                self.informacion_juego[c.PUNTAJE] += 1000
+                self.lista_puntaje_movil.adjuntar(
+                    puntaje.Puntaje(self.mario.rect.centro_x - self.visor.x,
+                                self.mario.rect.y, 1000))
+
+                if self.mario.grande and self.mario.fuego == False:
+                    self.mario.estado = c.GRANDE_PARA_DISPARAR
+                    self.mario.en_estado_transicion = True
+                elif self.mario.grande == False:
+                    self.mario.estado = c.PEQUENIO_A_GRANDE
+                    self.mario.en_estado_transicion = True
+                    self.convertir_hongos_en_floresFuego()
+
+            if encender.nombre != c.BOLA_DE_FUEGO:
+                encender.matar()
+
+
+    def convertir_hongos_en_floresFuego(self):
+        """Cuando Mario se vuelve grande, convierte todos los potenciadores de flores de fuego en
+        potenciadores de hongos"""
+        for ladrillo in self.ladrillo_grupo:
+            if ladrillo.contenido == c.HONGO:
+                ladrillo.contenido = c.FLOR_FUEGO
+        for caja_monedas in self.moneda_grupo:
+            if caja_monedas.contenido == c.HONGO:
+                caja_monedas.contenido = c.FLOR_FUEGO
+
+
+    def convertir_floresFuego_en_hongos(self):
+        """Cuando Mario se hace pequeño, convierte todos los potenciadores de setas en
+        potenciadores de flores de fuego"""
+        for ladrillo in self.ladrillo_grupo:
+            if ladrillo.contenido == c.FLOR_FUEGO:
+                ladrillo.contenido = c.HONGO
+        for caja_monedas in self.moneda_grupo:
+            if caja_monedas.contenido == c.FLOR_FUEGO:
+                caja_monedas.contenido = c.HONGO
+
+
+    def ajustar_mario_para_x_colisiones(self, colisionador):
+        """Pone a Mario al ras junto al colisionador después de moverse en el eje x"""
+        if self.mario.rect.x < colisionador.rect.x:
+            self.mario.rect.derecha = colisionador.rect.izquierda
+        else:
+            self.mario.rect.izquierda = colisionador.rect.derecha
+
+        self.mario.x_vel = 0
