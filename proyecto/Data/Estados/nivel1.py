@@ -372,7 +372,7 @@ class Nivel1(herramientas._Estado):
 
     def actualizar_en_estado_transicion(self, llaves):
         """Actualiza a mario en un estado de transición. Comprueba si deja el estado de transición o muere para volver a cambiar el estado del nivel"""
-        self.mario.actualizar(llaves, self.informacion_juego, self.grupo_encendido)
+        self.mario.actualizar(llaves, self.informacion_juego, self.superpoder_grupo)
         for puntaje in self.lista_puntaje_movil:
             puntaje.actualizar(self.lista_puntaje_movil, self.informacion_juego)
         if self.puntaje_bandera:
@@ -396,7 +396,7 @@ class Nivel1(herramientas._Estado):
 
     def actualizar_sprites(self, llaves):
         """Actualiza la ubicación de todos los sprites en la pantalla."""
-        self.mario.actualizar(llaves, self.informacion_juego, self.grupo_encendido)
+        self.mario.actualizar(llaves, self.informacion_juego, self.superpoder_grupo)
         for puntaje in self.lista_puntaje_movil:
             puntaje.actualizar(self.lista_puntaje_movil, self.informacion_juego)
         if self.puntaje_bandera:
@@ -409,7 +409,7 @@ class Nivel1(herramientas._Estado):
         self.coraza_grupo.actualizar(self.informacion_juego)
         self.ladrillo_grupo.actualizar()
         self.caja_monedas_grupo.actualizar(self.informacion_juego)
-        self.grupo_encendido.actualizar(self.informacion_juego, self.visor)
+        self.superpoder_grupo.actualizar(self.informacion_juego, self.visor)
         self.coin_group.actualizar(self.informacion_juego, self.visor)
         self.grupo_piezas_ladrillos.actualizar()
         self.ajustar_posicion_sprite()
@@ -453,7 +453,7 @@ class Nivel1(herramientas._Estado):
                 caja_de_setas = caja_de_monedas.Caja_de_monedas(control.rect.x,
                                         control.rect.bottom - 40,
                                         'hongo',
-                                        self.grupo_encendido)
+                                        self.superpoder_grupo)
                 caja_de_setas.empezar_golpe(self.lista_puntaje_movil)
                 self.caja_monedas_grupo.add(caja_de_setas)
 
