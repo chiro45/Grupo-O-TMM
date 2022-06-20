@@ -61,3 +61,71 @@ class Menu(herramientas._State):
         self.image_dict = {}
         self.image_dict['NOMBRE_CAJA_JUEGO'] = self.get_imagen(
             1, 60, 176, 88, (170, 100), configuracion.GFX['titulo_pantalla'])
+
+
+def obtener_imagen(self, x, y, ancho, alto, dest, sprite_sheet):
+        "===========RETORNA LA IMAGEN QUE SE VERA EN PANTALLA Y LA ACTUALIZA"
+        imagen = pg.Surface([ancho, alto])
+        tamano_rectangulo = imagen.get_rect()
+
+        imagen.blit(sprite_sheet, (0, 0), (x, y, ancho, alto))
+
+        if sprite_sheet == configuracion.GFX['titulo_pantalla']:
+            imagen.set_colorkey((255, 0, 220))
+            imagen = pg.transform.scale(imagen,
+                                   (int(tamano_rectangulo.width* c.TAMAÑO_MULTIPLICADOR),
+                                    int(tamano_rectangulo.height*  c.TAMAÑO_MULTIPLICADOR)))
+        else:
+            imagen.set_colorkey(c.NEGRO)
+            imagen = pg.transform.scale(imagen,
+                                   (int(tamano_rectangulo.width * 3),
+                                    int(tamano_rectangulo.height * 3)))
+
+        tamano_rectangulo = imagen.get_rect()
+        tamano_rectangulo.x = dest[0]
+        tamano_rectangulo.y = dest[1]
+        return (imagen, tamano_rectangulo)
+
+
+def actualizar(self, superficie, teclas , tiempo_actual):
+             "============ACTUALIZA LOS CAMBIOS DEL ESTADO EN TODO MOMENTO========="
+             
+             self.tiempo_actual = tiempo_actual
+             self.informacion_juego[c.TIEMPO_ACTUAL] = self.tiempo_actual
+             self.actualizarCurso(teclas)
+             self.informacionGeneral.actualizar(self.informacion_juego)
+
+             superficie.blit(self.fondo, self.visor, self.visor)
+             superficie.blit(self.image_dict['NOMBRE_CAJA_JUEGO'][0],self.image_dict['NOMBRE_CAJA_JUEGO'][1])
+             superficie.blit(self.mario.imagen, self.mario.rect)
+             superficie.blit(self.cursor.imagen, self.cursor.rect)
+             self.informacionGeneral.dibujar(superficie)
+
+
+def actualizarCurso(self, teclas):
+        "========================================ACTUALIZA EL CURSOR AL SELECCIONAR==============="
+        lista_entradas = [pg.K_RETURN, pg.K_a, pg.K_s]
+
+        if self.cursor.estado == c.PLAYER1:
+            self.cursor.rect.y = 358
+            if teclas[pg.K_DOWN]:
+                self.cursor.estatado = c.PLAYER2
+            for input in lista_entradas:
+                if teclas[input]:
+                    self.resetear_informacion_juego()
+                    self.hecho = True
+        elif self.cursor.estado == c.PLAYER2:
+            self.cursor.rect.y = 403
+            if teclas[pg.K_UP]:
+                self.cursor.estado = c.PLAYER1
+
+
+def resetear_informacion_juego(self):
+        "===============RESETEA TODO AL PERDER EL JUEGO============================="
+        self.informacion_juego[c.TOTAL_MONEDAS] = 0
+        self.informacion_juego[c.PUNTAJE] = 0
+        self.informacion_juego[c.VIDAS] = 3
+        self.informacion_juego[c.TIEMPO_ACTUAL] = 0.0
+        self.informacion_juego[c.ESTADO_DEL_NIVEL] = None
+
+        self.persistir = self.informacion_juego
