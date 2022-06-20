@@ -378,7 +378,7 @@ class Nivel1(herramientas._Estado):
         if self.puntaje_bandera:
             self.puntaje_bandera.actualizar(None, self.informacion_juego)
             self.marca_agregar_puntaje_bandera()
-        self.grupo_cajas_monedas.actualizar(self.informacion_juego)
+        self.caja_monedas_grupo.actualizar(self.informacion_juego)
         self.grupo_asta_bandera.actualizar(self.informacion_juego)
         self.comprobacion_mario_estado_transicion()
         self.marcar_bandera()
@@ -408,7 +408,7 @@ class Nivel1(herramientas._Estado):
         self.grupo_sprites_mueriendo.actualizar(self.informacion_juego, self.ventana_grafica)
         self.grupo_conchas.actualizar(self.informacion_juego)
         self.grupo_ladrillos.actualizar()
-        self.grupo_cajas_monedas.actualizar(self.informacion_juego)
+        self.caja_monedas_grupo.actualizar(self.informacion_juego)
         self.grupo_encendido.actualizar(self.informacion_juego, self.ventana_grafica)
         self.coin_group.actualizar(self.informacion_juego, self.ventana_grafica)
         self.grupo_piezas_ladrillos.actualizar()
@@ -455,7 +455,7 @@ class Nivel1(herramientas._Estado):
                                         'hongo',
                                         self.grupo_encendido)
                 caja_de_setas.empezar_golpe(self.lista_puntaje_movimiento)
-                self.grupo_cajas_monedas.add(caja_de_setas)
+                self.caja_monedas_grupo.add(caja_de_setas)
 
                 self.mario.y_vel = 7
                 self.mario.rect.y = caja_de_setas.rect.bottom
