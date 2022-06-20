@@ -405,7 +405,7 @@ class Nivel1(herramientas._Estado):
         self.grupo_asta_bandera.actualizar()
         self.puntos_control()
         self.grupo_enemigo.actualizar(self.informacion_juego)
-        self.grupo_sprites_mueriendo.actualizar(self.informacion_juego, self.visor)
+        self.sprites_sobre_muerte_en_grupo.actualizar(self.informacion_juego, self.visor)
         self.coraza_grupo.actualizar(self.informacion_juego)
         self.ladrillo_grupo.actualizar()
         self.caja_monedas_grupo.actualizar(self.informacion_juego)
