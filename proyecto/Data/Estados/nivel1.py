@@ -530,16 +530,16 @@ class Nivel1(herramientas._Estado):
 
         elif enemigo:
             if self.mario.invincible:
-                configuracion.SFX['kick'].jugar()
+                configuracion.SFX['kick'].play()
                 self.informacion_juego[c.PUNTAJE] += 100
-                self.lista_puntaje_movil.adjuntar(
+                self.lista_puntaje_movil.append(
                     puntaje.Puntaje(self.mario.rect.derecha - self.visor.x,
                                 self.mario.rect.y, 100))
                 enemigo.matar()
                 enemigo.empezar_salto_de_muerte(c.DERECHA)
                 self.sprites_sobre_muerte_en_grupo.add(enemigo)
             elif self.mario.grande:
-                configuracion.SFX['tubo'].jugar()
+                configuracion.SFX['tubo'].play()
                 self.mario.fuego = False
                 self.mario.y_vel = -1
                 self.mario.estado = c.GRANDE_A_PEQUENIO
@@ -557,15 +557,15 @@ class Nivel1(herramientas._Estado):
             if superpoder.nombre == c.ESTRELLA:
                 self.informacion_juego[c.PUNTAJE] += 1000
 
-                self.lista_puntaje_movil.adjuntar(
+                self.lista_puntaje_movil.append(
                     puntaje.Puntaje(self.mario.rect.centro_x - self.visor.x,
                                 self.mario.rect.y, 1000))
                 self.mario.invincible = True
                 self.mario.temporizador_inicio_invencible = self.tiempo_actual
             elif superpoder.name == c.HONGOS:
-                configuracion.SFX['superpoder'].jugar()
+                configuracion.SFX['superpoder'].play()
                 self.informacion_juego[c.PUNTAJE] += 1000
-                self.lista_puntaje_movil.adjuntar(
+                self.lista_puntaje_movil.append(
                     puntaje.Puntaje(self.mario.rect.centro_x - self.visor.x,
                                 self.mario.rect.y - 20, 1000))
 
@@ -574,17 +574,17 @@ class Nivel1(herramientas._Estado):
                 self.mario.en_estado_transicion = True
                 self.convertir_hongos_en_floresFuego()
             elif superpoder.nombre == c.HONGO_DE_VIDA:
-                self.lista_puntaje_movil.adjuntar(
+                self.lista_puntaje_movil.append(
                     puntaje.Puntaje(superpoder.rect.derecha - self.visor.x,
                                 superpoder.rect.y,
                                 c.UNA_VIDA))
 
                 self.informacion_juego[c.VIDAS] += 1
-                configuracion.SFX['una_vida'].jugar()
+                configuracion.SFX['una_vida'].play()
             elif superpoder.nombre == c.FLOR_FUEGO:
-                configuracion.SFX['superpoder'].jugar()
+                configuracion.SFX['superpoder'].play()
                 self.informacion_juego[c.PUNTAJE] += 1000
-                self.lista_puntaje_movil.adjuntar(
+                self.lista_puntaje_movil.append(
                     puntaje.Puntaje(self.mario.rect.centro_x - self.visor.x,
                                 self.mario.rect.y, 1000))
 
@@ -636,7 +636,7 @@ class Nivel1(herramientas._Estado):
         if coraza.estado == c.SALTO_SOBRE:
             if self.mario.rect.x < coraza.rect.x:
                 self.informacion_juego[c.PUNTAJE] += 400
-                self.lista_puntaje_movil.adjuntar(
+                self.lista_puntaje_movil.append(
                     puntaje.Puntaje(coraza.rect.centro_x - self.visor.x,
                                 coraza.rect.y,
                                 400))
@@ -658,7 +658,7 @@ class Nivel1(herramientas._Estado):
                 self.mario.estado = c.GRANDE_A_PEQUENIO
             elif self.mario.invincible:
                 self.informacion_juego[c.PUNTAJE] += 200
-                self.lista_puntaje_movil.adjuntar(
+                self.lista_puntaje_movil.append(
                     puntaje.Puntaje(coraza.rect.derecha - self.visor.x,
                                 coraza.rect.y, 200))
                 coraza.matar()
@@ -692,7 +692,7 @@ class Nivel1(herramientas._Estado):
 
         elif enemigo:
             if self.mario.invincible:
-                configuracion.SFX['patada'].jugar()
+                configuracion.SFX['patada'].play()
                 enemigo.matar()
                 self.sprites_sobre_muerte_en_grupo.add(enemigo)
                 enemigo.empezar_salto_de_muerte(c.DERECHA)
@@ -704,7 +704,7 @@ class Nivel1(herramientas._Estado):
 
         elif superpoder:
             if superpoder.nombre == c.ESTRELLA:
-                configuracion.SFX['superpoder'].jugar()
+                configuracion.SFX['superpoder'].play()
                 superpoder.matar()
                 self.mario.invincible = True
                 self.mario.invincible_start_timer = self.tiempo_actual
@@ -744,7 +744,7 @@ class Nivel1(herramientas._Estado):
 
             elif caja_monedas.estado == c.ABIERTA:
                 pass
-            configuracion.SFX['golpe'].jugar()
+            configuracion.SFX['golpe'].play()
             self.mario.y_vel = 7
             self.mario.rect.y = caja_monedas.rect.bottom
             self.mario.estado = c.CAERSE
@@ -758,7 +758,7 @@ class Nivel1(herramientas._Estado):
         if self.mario.rect.y > ladrillo.rect.y:
             if ladrillo.estado == c.LADRILLO_EN_REPOSO:
                 if self.mario.grande and ladrillo.contenido is None:
-                    configuracion.SFX['aplastar_ladrillos'].jugar()
+                    configuracion.SFX['aplastar_ladrillos'].play()
                     self.comprueba_enemigo_en_ladrillo(ladrillo)
                     ladrillo.matar()
                     self.grupo_piezas_ladrillo.add(
@@ -775,14 +775,14 @@ class Nivel1(herramientas._Estado):
                                                ladrillo.rect.y,
                                                2, -6))
                 else:
-                    configuracion.SFX['golpe'].jugar()
+                    configuracion.SFX['golpe'].play()
                     if ladrillo.total_monedas > 0:
                         self.informacion_juego[c.TOTAL_MONEDAS] += 1
                         self.informacion_juego[c.PUNTAJE] += 200
                     self.comprueba_enemigo_en_ladrillo(ladrillo)
                     ladrillo.empezar_golpe(self.lista_puntaje_movil)
             elif ladrillo.estado == c.ABIERTA:
-                configuracion.SFX['golpe'].jugar()
+                configuracion.SFX['golpe'].play()
             self.mario.y_vel = 7
             self.mario.rect.y = ladrillo.rect.abajo
             self.mario.estado = c.CAERSE
@@ -800,9 +800,9 @@ class Nivel1(herramientas._Estado):
         enemigo = pg.sprite.spritecollideany(ladrillo, self.grupo_enemigo)
 
         if enemigo:
-            configuracion.SFX['patada'].jugar()
+            configuracion.SFX['patada'].play()
             self.informacion_juego[c.PUNTAJE] += 100
-            self.lista_puntaje_movil.adjuntar(
+            self.lista_puntaje_movil.append(
                 puntaje.Puntaje(enemigo.rect.centro_x - self.visor.x,
                             enemigo.rect.y,
                             100))
