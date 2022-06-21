@@ -517,7 +517,7 @@ class Nivel1(herramientas._Estado):
         ladrillo = pg.sprite.spritecollideany(self.mario, self.ladrillo_grupo)
         enemigo = pg.sprite.spritecollideany(self.mario, self.grupo_enemigo)
         coraza = pg.sprite.spritecollideany(self.mario, self.coraza_grupo)
-        encender = pg.sprite.spritecollideany(self.mario, self.superpoder_grupo)
+        superpoder = pg.sprite.spritecollideany(self.mario, self.superpoder_grupo)
 
         if caja_monedas:
             self.ajustar_mario_para_x_colisiones(caja_monedas)
@@ -553,8 +553,8 @@ class Nivel1(herramientas._Estado):
         elif coraza:
             self.ajustar_mario_para_x_colisiones_coraza(coraza)
 
-        elif encender:
-            if encender.nombre == c.ESTRELLA:
+        elif superpoder:
+            if superpoder.nombre == c.ESTRELLA:
                 self.informacion_juego[c.PUNTAJE] += 1000
 
                 self.lista_puntaje_movil.adjuntar(
@@ -562,8 +562,8 @@ class Nivel1(herramientas._Estado):
                                 self.mario.rect.y, 1000))
                 self.mario.invincible = True
                 self.mario.temporizador_inicio_invencible = self.tiempo_actual
-            elif encender.name == c.HONGOS:
-                configuracion.SFX['encender'].jugar()
+            elif superpoder.name == c.HONGOS:
+                configuracion.SFX['superpoder'].jugar()
                 self.informacion_juego[c.PUNTAJE] += 1000
                 self.lista_puntaje_movil.adjuntar(
                     puntaje.Puntaje(self.mario.rect.centro_x - self.visor.x,
@@ -573,16 +573,16 @@ class Nivel1(herramientas._Estado):
                 self.mario.estadp = c.PEQUENIO_A_GRANDE
                 self.mario.en_estado_transicion = True
                 self.convertir_hongos_en_floresFuego()
-            elif encender.nombre == c.HONGO_DE_VIDA:
+            elif superpoder.nombre == c.HONGO_DE_VIDA:
                 self.lista_puntaje_movil.adjuntar(
-                    puntaje.Puntaje(encender.rect.derecha - self.visor.x,
-                                encender.rect.y,
+                    puntaje.Puntaje(superpoder.rect.derecha - self.visor.x,
+                                superpoder.rect.y,
                                 c.UNA_VIDA))
 
                 self.informacion_juego[c.VIDAS] += 1
                 configuracion.SFX['una_vida'].jugar()
-            elif encender.nombre == c.FLOR_FUEGO:
-                configuracion.SFX['encender'].jugar()
+            elif superpoder.nombre == c.FLOR_FUEGO:
+                configuracion.SFX['superpoder'].jugar()
                 self.informacion_juego[c.PUNTAJE] += 1000
                 self.lista_puntaje_movil.adjuntar(
                     puntaje.Puntaje(self.mario.rect.centro_x - self.visor.x,
@@ -596,8 +596,8 @@ class Nivel1(herramientas._Estado):
                     self.mario.en_estado_transicion = True
                     self.convertir_hongos_en_floresFuego()
 
-            if encender.nombre != c.BOLA_DE_FUEGO:
-                encender.matar()
+            if superpoder.nombre != c.BOLA_DE_FUEGO:
+                superpoder.matar()
 
 
     def convertir_hongos_en_floresFuego(self):
@@ -677,7 +677,7 @@ class Nivel1(herramientas._Estado):
         coraza = pg.sprite.spritecollideany(self.mario, self.coraza_grupo)
         ladrillo = pg.sprite.spritecollideany(self.mario, self.ladrillo_grupo)
         caja_monedas = pg.sprite.spritecollideany(self.mario, self.caja_monedas_grupo)
-        encender = pg.sprite.spritecollideany(self.mario, self.superpoder_grupo)
+        superpoder = pg.sprite.spritecollideany(self.mario, self.superpoder_grupo)
 
         ladrillo, caja_monedas = self.prevenir_conflicto_de_colision(ladrillo, caja_monedas)
 
@@ -702,10 +702,10 @@ class Nivel1(herramientas._Estado):
         elif coraza:
             self.ajustar_mario_para_colisiones_coraza_y(coraza)
 
-        elif encender:
-            if encender.nombre == c.ESTRELLA:
-                configuracion.SFX['encender'].jugar()
-                encender.matar()
+        elif superpoder:
+            if superpoder.nombre == c.ESTRELLA:
+                configuracion.SFX['superpoder'].jugar()
+                superpoder.matar()
                 self.mario.invincible = True
                 self.mario.invincible_start_timer = self.tiempo_actual
 
