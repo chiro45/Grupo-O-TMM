@@ -498,14 +498,14 @@ class Mario(pg.sprite.Sprite):
             if self.conteo_bolas_de_fuego < 2:
                 self.permitir_bolafuego = False
                 superpoder_grupo.add(
-                    potenciadores.BolaFuego(self.rect.derecha, self.rect.y, self.frente_derecha))
+                    superpoder_grupo.BolaFuego(self.rect.derecha, self.rect.y, self.frente_derecha))
                 self.tiempo_ultima_bolaFuego = self.tiempo_actual
 
                 self.indice_cuadro = 6
                 if self.frente_derecha:
-                    self.image = self.cuadro_derecho[self.indice_cuadro]
+                    self.imagen = self.cuadro_derecho[self.indice_cuadro]
                 else:
-                    self.image = self.cuadro_izquierdo[self.indice_cuadro]
+                    self.imagen = self.cuadro_izquierdo[self.indice_cuadro]
 
 
     def numero_bolas_fuego(self, superpoder_grupo):
@@ -686,7 +686,7 @@ class Mario(pg.sprite.Sprite):
         self.y_vel = -11
         self.gravedad = .5
         self.indice_cuadro = 6
-        self.image = self.cuadro_derecho[self.indice_cuadro]
+        self.imagen = self.cuadro_derecho[self.indice_cuadro]
         self.estado = c.SALTO_MORTAL
         self.en_estado_transicion = True
 
@@ -737,12 +737,12 @@ class Mario(pg.sprite.Sprite):
         """Durante un cambio de pequeño a grande, establece la imagen de mario en el
         transición/tamaño medio"""
         if self.frente_derecha:
-            self.image = self.cuadro_normal_chico[0][7]
+            self.imagen = self.cuadro_normal_chico[0][7]
         else:
-            self.image = self.cuadro_normal_chico[1][7]
+            self.imagen = self.cuadro_normal_chico[1][7]
         abajo = self.rect.abajo
         centro_x = self.rect.centro_x
-        self.rect = self.image.get_rect()
+        self.rect = self.imagen.get_rect()
         self.rect.abajo = abajo
         self.rect.centro_x = centro_x
 
@@ -750,12 +750,12 @@ class Mario(pg.sprite.Sprite):
     def poner_mario_imagen_pequenia(self):
         """Durante un cambio de pequeño a grande, establece la imagen de mario en pequeña"""
         if self.frente_derecha:
-            self.image = self.cuadro_normal_chico[0][0]
+            self.imagen = self.cuadro_normal_chico[0][0]
         else:
-            self.image = self.cuadro_normal_chico[1][0]
+            self.imagen = self.cuadro_normal_chico[1][0]
         abajo = self.rect.abajo
         centro_x = self.rect.centro_x
-        self.rect = self.image.get_rect()
+        self.rect = self.imagen.get_rect()
         self.rect.abajo = abajo
         self.rect.centro_x = centro_x
 
@@ -763,12 +763,12 @@ class Mario(pg.sprite.Sprite):
     def poner_mario_imagen_grande(self):
         """Durante un cambio de pequeño a grande, establece la imagen de mario en grande"""
         if self.frente_derecha:
-            self.image = self.cuadro_normal_grande[0][0]
+            self.imagen = self.cuadro_normal_grande[0][0]
         else:
-            self.image = self.cuadro_normal_grande[1][0]
+            self.imagen = self.cuadro_normal_grande[1][0]
         abajo = self.rect.abajo
         centro_x = self.rect.centro_x
-        self.rect = self.image.get_rect()
+        self.rect = self.imagen.get_rect()
         self.rect.abajo = abajo
         self.rect.centro_x = centro_x
 
@@ -779,8 +779,8 @@ class Mario(pg.sprite.Sprite):
         self.cuadro_izquierdo = self.cuadro_normal_grande_izquierdo
         abajo = self.rect.abajo
         left = self.rect.x
-        image = self.cuadro_derecho[0]
-        self.rect = image.get_rect()
+        imagen = self.cuadro_derecho[0]
+        self.rect = imagen.get_rect()
         self.rect.abajo = abajo
         self.rect.x = left
 
@@ -804,35 +804,35 @@ class Mario(pg.sprite.Sprite):
         if self.temporizador_transicion_fuego == 0:
             self.temporizador_transicion_fuego = self.tiempo_actual
         elif (self.tiempo_actual - self.temporizador_transicion_fuego) > 65 and (self.tiempo_actual - self.temporizador_transicion_fuego) < 130:
-            self.image = cuadros[0]
+            self.imagen = cuadros[0]
         elif (self.tiempo_actual - self.temporizador_transicion_fuego) < 195:
-            self.image = cuadros[1]
+            self.imagen = cuadros[1]
         elif (self.tiempo_actual - self.temporizador_transicion_fuego) < 260:
-            self.image = cuadros[2]
+            self.imagen = cuadros[2]
         elif (self.tiempo_actual - self.temporizador_transicion_fuego) < 325:
-            self.image = cuadros[3]
+            self.imagen = cuadros[3]
         elif (self.tiempo_actual - self.temporizador_transicion_fuego) < 390:
-            self.image = cuadros[0]
+            self.imagen = cuadros[0]
         elif (self.tiempo_actual - self.temporizador_transicion_fuego) < 455:
-            self.image = cuadros[1]
+            self.imagen = cuadros[1]
         elif (self.tiempo_actual - self.temporizador_transicion_fuego) < 520:
-            self.image = cuadros[2]
+            self.imagen = cuadros[2]
         elif (self.tiempo_actual - self.temporizador_transicion_fuego) < 585:
-            self.image = cuadros[3]
+            self.imagen = cuadros[3]
         elif (self.tiempo_actual - self.temporizador_transicion_fuego) < 650:
-            self.image = cuadros[0]
+            self.imagen = cuadros[0]
         elif (self.tiempo_actual - self.temporizador_transicion_fuego) < 715:
-            self.image = cuadros[1]
+            self.imagen = cuadros[1]
         elif (self.tiempo_actual - self.temporizador_transicion_fuego) < 780:
-            self.image = cuadros[2]
+            self.imagen = cuadros[2]
         elif (self.tiempo_actual - self.temporizador_transicion_fuego) < 845:
-            self.image = cuadros[3]
+            self.imagen = cuadros[3]
         elif (self.tiempo_actual - self.temporizador_transicion_fuego) < 910:
-            self.image = cuadros[0]
+            self.imagen = cuadros[0]
         elif (self.tiempo_actual - self.temporizador_transicion_fuego) < 975:
-            self.image = cuadros[1]
+            self.imagen = cuadros[1]
         elif (self.tiempo_actual - self.temporizador_transicion_fuego) < 1040:
-            self.image = cuadros[2]
+            self.imagen = cuadros[2]
             self.fuego = True
             self.en_estado_transicion = False
             self.estado = c.CAMINAR
