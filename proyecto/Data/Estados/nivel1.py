@@ -443,7 +443,7 @@ class Nivel1(herramientas._Estado):
 
             elif control.nombre == '12':
                 self.estado = c.EN_CASTILLO
-                self.mario.matar()
+                self.mario.kill()
                 self.mario.estado == c.PARARSE
                 self.mario.en_castillo = True
                 self.pantalla_informacion_superior.estado = c.CUENTA_REGRESIVA_RAPIDA
@@ -535,7 +535,7 @@ class Nivel1(herramientas._Estado):
                 self.lista_puntaje_movil.append(
                     puntaje.Puntaje(self.mario.rect.derecha - self.visor.x,
                                 self.mario.rect.y, 100))
-                enemigo.matar()
+                enemigo.kill()
                 enemigo.empezar_salto_de_muerte(c.DERECHA)
                 self.sprites_sobre_muerte_en_grupo.add(enemigo)
             elif self.mario.grande:
@@ -597,7 +597,7 @@ class Nivel1(herramientas._Estado):
                     self.convertir_hongos_en_floresFuego()
 
             if superpoder.nombre != c.BOLA_DE_FUEGO:
-                superpoder.matar()
+                superpoder.kill()
 
 
     def convertir_hongos_en_floresFuego(self):
@@ -661,7 +661,7 @@ class Nivel1(herramientas._Estado):
                 self.lista_puntaje_movil.append(
                     puntaje.Puntaje(coraza.rect.derecha - self.visor.x,
                                 coraza.rect.y, 200))
-                coraza.matar()
+                coraza.kill()
                 self.sprites_sobre_muerte_en_grupo.add(coraza)
                 coraza.empezar_salto_de_muerte(c.DERECHA)
             else:
@@ -693,7 +693,7 @@ class Nivel1(herramientas._Estado):
         elif enemigo:
             if self.mario.invincible:
                 configuracion.SFX['patada'].play()
-                enemigo.matar()
+                enemigo.kill()
                 self.sprites_sobre_muerte_en_grupo.add(enemigo)
                 enemigo.empezar_salto_de_muerte(c.DERECHA)
             else:
@@ -705,7 +705,7 @@ class Nivel1(herramientas._Estado):
         elif superpoder:
             if superpoder.nombre == c.ESTRELLA:
                 configuracion.SFX['superpoder'].play()
-                superpoder.matar()
+                superpoder.kill()
                 self.mario.invincible = True
                 self.mario.invincible_start_timer = self.tiempo_actual
 
@@ -760,7 +760,7 @@ class Nivel1(herramientas._Estado):
                 if self.mario.grande and ladrillo.contenido is None:
                     configuracion.SFX['aplastar_ladrillos'].play()
                     self.comprueba_enemigo_en_ladrillo(ladrillo)
-                    ladrillo.matar()
+                    ladrillo.kill()
                     self.grupo_piezas_ladrillo.add(
                         ladrillos.PiezasLadrillo(ladrillo.rect.x,
                                                ladrillo.rect.y - (ladrillo.rect.altura/2),
@@ -806,7 +806,7 @@ class Nivel1(herramientas._Estado):
                 puntaje.Puntaje(enemigo.rect.centro_x - self.visor.x,
                             enemigo.rect.y,
                             100))
-            enemigo.matar()
+            enemigo.kill()
             self.sprites_sobre_muerte_en_grupo.add(enemigo)
             if self.mario.rect.centro_x > ladrillo.rect.centro_x:
                 enemigo.empezar_salto_de_muerte('derecha')
