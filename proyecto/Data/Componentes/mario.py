@@ -277,6 +277,101 @@ class Mario(pg.sprite.Sprite):
             self.get_imagen(209, 50, 16, 29))  # marco 2 del mastil de bandera [10]
 
 
+        #Los cuadros de la imagen izquierda estan numerados igual que los de la derecha
+        #pero los cuadros se invierten
+
+        for cuadro in self.cuadro_normal_chico_derecho:
+            nueva_imagen = pg.transform.flip(cuadro, True, False)
+            self.cuadro_normal_chico_izquierdo.append(nueva_imagen)
+
+        for cuadro in self.cuadro_verde_chico_derecho:
+            nueva_imagen = pg.transform.flip(cuadro, True, False)
+            self.cuadro_verde_chico_izquierdo.append(nueva_imagen)
+
+        for cuadro in self.cuadro_rojo_chico_derecho:
+            nueva_imagen = pg.transform.flip(cuadro, True, False)
+            self.cuadro_rojo_chico_izquierdo.append(nueva_imagen)
+
+        for cuadro in self.cuadro_negro_chico_derecho:
+            nueva_imagen = pg.transform.flip(cuadro, True, False)
+            self.cuadro_negro_chico_izquierdo.append(nueva_imagen)
+
+        for cuadro in self.cuadro_normal_grande_derecho:
+            nueva_imagen = pg.transform.flip(cuadro, True, False)
+            self.cuadro_normal_grande_izquierdo.append(nueva_imagen)
+
+        for cuadro in self.cuadro_verde_grande_derecho:
+            nueva_imagen = pg.transform.flip(cuadro, True, False)
+            self.cuadro_verde_grande_izquierdo.append(nueva_imagen)
+
+        for cuadro in self.cuadro_rojo_grande_derecho:
+            nueva_imagen = pg.transform.flip(cuadro, True, False)
+            self.cuadro_rojo_grande_izquierdo.append(nueva_imagen)
+
+        for cuadro in self.cuadro_negro_grande_derecho:
+            nueva_imagen = pg.transform.flip(cuadro, True, False)
+            self.cuadro_negro_grande_izquierdo.append(nueva_imagen)
+
+        for cuadro in self.cuadro_fuego_derecho:
+            nueva_imagen = pg.transform.flip(cuadro, True, False)
+            self.cuadro_fuego_izquierdo.append(nueva_imagen)
+
+
+        self.cuadro_normal_chico = [self.cuadro_normal_chico_derecho,
+                              self.cuadro_normal_chico_izquierdo]
+
+        self.cuadro_verde_chico = [self.cuadro_verde_chico_derecho,
+                             self.cuadro_verde_chico_izquierdo]
+
+        self.cuadro_rojo_chico = [self.cuadro_rojo_chico_derecho,
+                           self.cuadro_rojo_chico_izquierdo]
+
+        self.cuadro_negro_chico = [self.cuadro_negro_chico_derecho,
+                             self.cuadro_negro_chico_izquierdo]
+
+        self.listado_cuadro_chico_invencible = [self.cuadro_normal_chico,
+                                          self.cuadro_verde_chico,
+                                          self.cuadro_rojo_chico,
+                                          self.cuadro_negro_chico]
+
+        self.cuadro_normal_grande = [self.cuadro_normal_grande_derecho,
+                                  self.cuadro_normal_grande_izquierdo]
+
+        self.cuadro_verde_grande = [self.cuadro_verde_grande_derecho,
+                                 self.cuadro_verde_grande_izquierdo]
+
+        self.cuadro_rojo_grande = [self.cuadro_rojo_grande_derecho,
+                               self.cuadro_rojo_grande_izquierdo]
+
+        self.cuadro_negro_grande = [self.cuadro_negro_grande_derecho,
+                                 self.cuadro_negro_grande_izquierdo]
+
+        self.cuadro_fuego = [self.cuadro_fuego_derecho,
+                            self.cuadro_fuego_izquierdo]
+
+        self.listado_cuadro_grande = [self.cuadro_normal_grande,
+                                           self.cuadro_verde_grande,
+                                           self.cuadro_rojo_grande,
+                                           self.cuadro_negro_grande]
+
+        self.todas_imagenes = [self.cuadro_normal_grande_derecho,
+                           self.cuadro_negro_grande_derecho,
+                           self.cuadro_rojo_grande_derecho,
+                           self.cuadro_verde_grande_derecho,
+                           self.cuadro_normal_chico_derecho,
+                           self.cuadro_verde_chico_derecho,
+                           self.cuadro_rojo_chico_derecho,
+                           self.cuadro_negro_chico_derecho,
+                           self.cuadro_normal_grande_izquierdo,
+                           self.cuadro_negro_grande_izquierdo,
+                           self.cuadro_rojo_grande_izquierdo,
+                           self.cuadro_verde_grande_izquierdo,
+                           self.cuadro_normal_chico_izquierdo,
+                           self.cuadro_rojo_chico_izquierdo,
+                           self.cuadro_verde_chico_izquierdo,
+                           self.cuadro_negro_chico_izquierdo]
+
+
    
         
 
