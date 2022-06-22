@@ -372,6 +372,123 @@ class Mario(pg.sprite.Sprite):
                            self.cuadro_negro_chico_izquierdo]
 
 
+        self.cuadro_derecho = self.cuadro_normal_chico[0]
+        self.cuadro_izquierdo = self.cuadro_normal_chico[1]
+
+
+    def get_imagen(self, x, y, ancho, alto):
+        """Extrae las imagenes de la plantilla"""
+        imagen = pg.Surface([ancho, alto])
+        rect = imagen.get_rect()
+
+        imagen.blit(self.sprite_sheet, (0, 0), (x, y, ancho, alto))
+        imagen.set_colorkey(c.BLACK)
+        imagen = pg.transform.scale(imagen,
+                                   (int(rect.ancho*c.MULTIPLICADOR_TAMANIO),
+                                    int(rect.alto*c.MULTIPLICADOR_TAMANIO)))
+        return imagen
+
+
+    def actualizar(self, llaves, informacion_juego, grupo_fuego):
+        """Actualiza las animaciones de mario un cuadro a la vez"""
+        self.tiempo_actual = informacion_juego[c.TIEMPO_ACTUAL]
+        self.manejo_estado(llaves, grupo_fuego)
+        self.comprueba_estado_especial()
+        self.animacion()
+
+
+    def manejo_estado(self, llaves, grupo_fuego):
+        """Determina el comportamiento de mario basado en su estado"""
+        if self.estado == c.PARARSE:
+            self.parado(llaves, grupo_fuego)
+        elif self.estado == c.CAMINAR:
+            self.cambinando(llaves, grupo_fuego)
+        elif self.estado == c.SALTAR:
+            self.saltando(llaves, grupo_fuego)
+        elif self.estado == c.CAER:
+            self.cayendo(llaves, grupo_fuego)
+        elif self.estado == c.SALTO_DE_MUERTE:
+            self.saltando_muerte()
+        elif self.estado == c.PEQUENIO_A_GRANDE:
+            self.cambiando_a_grande()
+        elif self.estado == c.GRANDE_A_FUEGO:
+            self.cambio_a_fuego()
+        elif self.estado == c.GRANDE_A_PEQUENIO:
+            self.cambio_a_pequenio()
+        elif self.estado == c.MASTILBANDERA:
+            self.deslizamiento_bandera()
+        elif self.estado == c.BAJO_MASTIL:
+            self.sentando_abajo_mastil()
+        elif self.estado == c.CAMINANDO_AL_CASTILLO:
+            self.caminando_al_castillo()
+        elif self.estado == c.CAIDA_FIN_NIVEL:
+            self.caida_fin_nivel()
+
+
+    def parado(self, llaves, grupo_fuego):
+        """Esta funcion es llamada si mario sigue de pie"""
+        self.verifica_permitir_saltar(llaves)
+        self.verifica_permitir_bolafuego(llaves)
+        
+        self.indice_cuadro = 0
+        self.x_vel = 0
+        self.y_vel = 0
+
+        if llaves[herramientas.clave_enlace['accion']]:
+            if self.fuego and self.permitir_bolafuego:
+                self.disparar_bolafuego(grupo_fuego)
+
+        if llaves[herramientas.clave_enlace['abajo']]:
+            self.agacharse = True
+
+        if llaves[herramientas.clave_enlace['izquierda']]:
+            self.frente_derecha = False
+            self.no_agachado()
+            self.estado = c.CAMINAR
+        elif llaves[herramientas.clave_enlace['right']]:
+            self.frente_derecha = True
+            self.no_agachado()
+            self.estado = c.CAMINAR
+        elif llaves[herramientas.clave_enlace['jump']]:
+            if self.permitir_salto:
+                if self.grande:
+                    configuracion.SFX['salgo_grande'].play()
+                else:
+                    configuracion.SFX['salto_pequenio'].play()
+                self.estado = c.SALTAR
+                self.y_vel = c.VEL_SALTO
+        else:
+            self.estado = c.PARARSE
+
+        if not llaves[herramientas.clave_enlace['abajo']]:
+            self.no_agachado()
+
+
+    def no_agachado(self):
+        """dejar de estar agachado"""
+        abajo = self.rect.abajo
+        izquierda = self.rect.x
+        if self.frente_derecha:
+            self.imagen = self.cuadro_derecho[0]
+        else:
+            self.imagen = self.cuadro_izquierdo[0]
+        self.rect = self.imagen.get_rect()
+        self.rect.abajo = abajo
+        self.rect.x = izquierda
+        self.agacharse = False
+
+
+    def verifica_permitir_saltar(self, llaves):
+        """Verifica si mario puede saltar"""
+        if not llaves[herramientas.clave_enlace['salto']]:
+            self.permitir_salto = True
+
+
+    def verifica_permitir_bolafuego(self, llaves):
+        """Verifica si puede disparar bolas de fuego"""
+        if not llaves[herramientas.clave_enlace['accion']]:
+            self.permitir_bolafuego = True
+
    
         
 
