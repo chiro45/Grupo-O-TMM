@@ -1,7 +1,7 @@
 
 
 import pygame as pg
-from .import constantes as c
+from ..import constantes as c
 from .. import configuracion, herramientas
 
 
