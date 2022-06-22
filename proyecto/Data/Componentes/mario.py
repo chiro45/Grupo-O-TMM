@@ -489,6 +489,355 @@ class Mario(pg.sprite.Sprite):
         if not llaves[herramientas.clave_enlace['accion']]:
             self.permitir_bolafuego = True
 
+    def disparar_bola_de_fuego(self, superpoder_grupo):
+        """Dispara bolas de fuego, permitiendo que no existan más de dos a la vez"""
+        configuracion.SFX['bola_de_fuego'].play()
+        self.conteo_bolas_de_fuego = self.numero_bolas_fuego(superpoder_grupo)
+
+        if (self.tiempo_actual - self.tiempo_ultima_bolaFuego) > 200:
+            if self.conteo_bolas_de_fuego < 2:
+                self.permitir_bolafuego = False
+                superpoder_grupo.add(
+                    potenciadores.BolaFuego(self.rect.derecha, self.rect.y, self.frente_derecha))
+                self.tiempo_ultima_bolaFuego = self.tiempo_actual
+
+                self.indice_cuadro = 6
+                if self.frente_derecha:
+                    self.image = self.cuadro_derecho[self.indice_cuadro]
+                else:
+                    self.image = self.cuadro_izquierdo[self.indice_cuadro]
+
+
+    def numero_bolas_fuego(self, superpoder_grupo):
+        """Contar el número de bolas de fuego que existen en el nivel"""
+        lista_bolasFuego = []
+
+        for superpoder in superpoder_grupo:
+            if superpoder.nombre == c.BOLA_DE_FUEGO:
+                lista_bolasFuego.append(superpoder)
+
+        return len(lista_bolasFuego)
+
+
+    def walking(self, llaves, grupo_fuego):
+        """Esta función se llama cuando Mario está en un estado de caminar
+        Cambia el marco, verifica si se mantiene presionado el botón de ejecución,
+        comprueba si hay un salto, luego ajusta el estado si es necesario"""
+
+        self.verificar_permitir_salto(llaves)
+        self.verificar_permitir_bolaFuego(llaves)
+
+        if self.indice_cuadro == 0:
+            self.indice_cuadro += 1
+            self.tiempo_caminando = self.tiempo_actual
+        else:
+            if (self.tiempo_actual - self.tiempo_caminando >
+                    self.calculo_velocidad_animacion()):
+                if self.indice_cuadro < 3:
+                    self.indice_cuadro += 1
+                else:
+                    self.indice_cuadro = 1
+
+                self.tiempo_caminando = self.tiempo_actual
+
+        if llaves[herramientas.clave_enlace['accion']]:
+            self.max_x_vel = c.MAXIMA_VELOCIDAD_CORRER
+            self.x_accel = c.ACELERACION_CORRER
+            if self.fuego and self.permitir_bolafuego:
+                self.disparar_bola_de_fuego(grupo_fuego)
+        else:
+            self.max_x_vel = c.MAXIMA_VELOCIDAD_CAMINAR
+            self.x_accel = c.ACELERACION_CAMINAR
+
+        if llaves[herramientas.clave_enlace['salto']]:
+            if self.permitir_salto:
+                if self.grande:
+                    configuracion.SFX['salto_grande'].play()
+                else:
+                    configuracion.SFX['salto_chico'].play()
+                self.estado = c.SALTO
+                if self.x_vel > 4.5 or self.x_vel < -4.5:
+                    self.y_vel = c.VELOCIDAD_DE_SALTO - .5
+                else:
+                    self.y_vel = c.VELOCIDAD_DE_SALTO
+
+
+        if llaves[herramientas.clave_enlace['izquierda']]:
+            self.no_agachado()
+            self.frente_derecha = False
+            if self.x_vel > 0:
+                self.indice_cuadro = 5
+                self.x_accel = c.GIRO_PEQUENIO
+            else:
+                self.x_accel = c.ACELERACION_CAMINAR
+
+            if self.x_vel > (self.max_x_vel * -1):
+                self.x_vel -= self.x_accel
+                if self.x_vel > -0.5:
+                    self.x_vel = -0.5
+            elif self.x_vel < (self.max_x_vel * -1):
+                self.x_vel += self.x_accel
+
+        elif llaves[herramientas.clave_enlace['right']]:
+            self.no_agachado()
+            self.frente_derecha = True
+            if self.x_vel < 0:
+                self.indice_cuadro = 5
+                self.x_accel = c.SMALL_TURNAROUND
+            else:
+                self.x_accel = c.WALK_ACCEL
+
+            if self.x_vel < self.max_x_vel:
+                self.x_vel += self.x_accel
+                if self.x_vel < 0.5:
+                    self.x_vel = 0.5
+            elif self.x_vel > self.max_x_vel:
+                self.x_vel -= self.x_accel
+
+        else:
+            if self.frente_derecha:
+                if self.x_vel > 0:
+                    self.x_vel -= self.x_accel
+                else:
+                    self.x_vel = 0
+                    self.state = c.PARARSE
+            else:
+                if self.x_vel < 0:
+                    self.x_vel += self.x_accel
+                else:
+                    self.x_vel = 0
+                    self.state = c.PARARSE
+
+
+    def calculo_velocidad_animacion(self):
+        """Se utiliza para hacer que la velocidad de la animación al caminar esté en relación con
+        x-vel de mario"""
+        if self.x_vel == 0:
+            velocidad_animacion = 130
+        elif self.x_vel > 0:
+            velocidad_animacion = 130 - (self.x_vel * (13))
+        else:
+            velocidad_animacion = 130 - (self.x_vel * (13) * -1)
+
+        return velocidad_animacion
+
+
+    def saltando(self, llaves, grupo_fuego):
+        """Llamado cuando Mario está en un estado de SALTO."""
+        self.permitir_salto = False
+        self.indice_cuadro = 4
+        self.gravedad = c.GRAVEDAD_DE_SALTO
+        self.y_vel += self.gravedad
+        self.verificar_permitir_bolaFuego(llaves)
+
+        if self.y_vel >= 0 and self.y_vel < self.max_y_vel:
+            self.gravedad = c.GRAVEDAD
+            self.state = c.CAERSE
+
+        if llaves[herramientas.clave_enlace['izquierda']]:
+            if self.x_vel > (self.max_x_vel * - 1):
+                self.x_vel -= self.x_accel
+
+        elif llaves[herramientas.clave_enlace['derecha']]:
+            if self.x_vel < self.max_x_vel:
+                self.x_vel += self.x_accel
+
+        if not llaves[herramientas.clave_enlace['salto']]:
+            self.gravedad = c.GRAVEDAD
+            self.estado = c.CAERSE
+
+        if llaves[herramientas.clave_enlace['accion']]:
+            if self.fuego and self.permitir_bolafuego:
+                self.disparar_bola_de_fuego(grupo_fuego)
+
+
+    def cayendo(self, llaves, grupo_fuego):
+        """Llamado cuando Mario está en estado de CAÍDA"""
+        self.verificar_permitir_bolaFuego(llaves)
+        if self.y_vel < c.MAX_VEL_EJEY:
+            self.y_vel += self.gravedad
+
+        if llaves[herramientas.clave_enlace['izquierda']]:
+            if self.x_vel > (self.max_x_vel * - 1):
+                self.x_vel -= self.x_accel
+
+        elif llaves[herramientas.clave_enlace['derecha']]:
+            if self.x_vel < self.max_x_vel:
+                self.x_vel += self.x_accel
+
+        if llaves[herramientas.clave_enlace['accion']]:
+            if self.fuego and self.permitir_bolafuego:
+                self.disparar_bola_de_fuego(grupo_fuego)
+
+
+    def saltando_muerte(self):
+        """Llamado cuando Mario está en estado SALTO_MORTAL"""
+        if self.temporizador_muerte == 0:
+            self.temporizador_muerte = self.tiempo_actual
+        elif (self.tiempo_actual - self.temporizador_muerte) > 500:
+            self.rect.y += self.y_vel
+            self.y_vel += self.gravedad
+
+
+    def empezar_salto_de_muerte(self, informacion_juego):
+        """Usa a Mario en un estado SALTO_MORTAL"""
+        self.muerto = True
+        informacion_juego[c.MARIO_MUERTO] = True
+        self.y_vel = -11
+        self.gravedad = .5
+        self.indice_cuadro = 6
+        self.image = self.cuadro_derecho[self.indice_cuadro]
+        self.estado = c.SALTO_MORTAL
+        self.en_estado_transicion = True
+
+
+    def cambio_a_grande(self):
+        """Cambia el atributo de imagen de Mario basado en el tiempo mientras
+        transición a grande"""
+        self.en_estado_transicion = True
+
+        if self.temporizador_transicion == 0:
+            self.temporizador_transicion = self.tiempo_actual
+        elif self.temporizador_entre_dos_tiempos(135, 200):
+            self.poner_mario_imagen_centro()
+        elif self.temporizador_entre_dos_tiempos(200, 365):
+            self.poner_mario_imagen_pequenia()
+        elif self.temporizador_entre_dos_tiempos(365, 430):
+            self.poner_mario_imagen_centro()
+        elif self.temporizador_entre_dos_tiempos(430, 495):
+            self.poner_mario_imagen_pequenia()
+        elif self.temporizador_entre_dos_tiempos(495, 560):
+            self.poner_mario_imagen_centro()
+        elif self.temporizador_entre_dos_tiempos(560, 625):
+            self.poner_mario_imagen_grande()
+        elif self.temporizador_entre_dos_tiempos(625, 690):
+            self.poner_mario_imagen_pequenia()
+        elif self.temporizador_entre_dos_tiempos(690, 755):
+            self.poner_mario_imagen_centro()
+        elif self.temporizador_entre_dos_tiempos(755, 820):
+            self.poner_mario_imagen_grande()
+        elif self.temporizador_entre_dos_tiempos(820, 885):
+            self.poner_mario_imagen_pequenia()
+        elif self.temporizador_entre_dos_tiempos(885, 950):
+            self.poner_mario_imagen_grande()
+            self.state = c.CAMINAR
+            self.en_estado_transicion = False
+            self.temporizador_transicion = 0
+            self.hacerse_grande()
+
+
+    def temporizador_entre_dos_tiempos(self,inicio, final):
+        """Comprueba si el temporizador está en el momento adecuado para la acción."""
+        if (self.tiempo_actual - self.temporizador_transicion) >= inicio\
+            and (self.tiempo_actual - self.temporizador_transicion) < final:
+            return True
+
+
+    def poner_mario_imagen_centro(self):
+        """Durante un cambio de pequeño a grande, establece la imagen de mario en el
+        transición/tamaño medio"""
+        if self.frente_derecha:
+            self.image = self.cuadro_normal_chico[0][7]
+        else:
+            self.image = self.cuadro_normal_chico[1][7]
+        abajo = self.rect.abajo
+        centro_x = self.rect.centro_x
+        self.rect = self.image.get_rect()
+        self.rect.abajo = abajo
+        self.rect.centro_x = centro_x
+
+
+    def poner_mario_imagen_pequenia(self):
+        """Durante un cambio de pequeño a grande, establece la imagen de mario en pequeña"""
+        if self.frente_derecha:
+            self.image = self.cuadro_normal_chico[0][0]
+        else:
+            self.image = self.cuadro_normal_chico[1][0]
+        abajo = self.rect.abajo
+        centro_x = self.rect.centro_x
+        self.rect = self.image.get_rect()
+        self.rect.abajo = abajo
+        self.rect.centro_x = centro_x
+
+
+    def poner_mario_imagen_grande(self):
+        """Durante un cambio de pequeño a grande, establece la imagen de mario en grande"""
+        if self.frente_derecha:
+            self.image = self.cuadro_normal_grande[0][0]
+        else:
+            self.image = self.cuadro_normal_grande[1][0]
+        abajo = self.rect.abajo
+        centro_x = self.rect.centro_x
+        self.rect = self.image.get_rect()
+        self.rect.abajo = abajo
+        self.rect.centro_x = centro_x
+
+
+    def hacerse_grande(self):
+        self.grande = True
+        self.cuadro_derecho = self.cuadro_normal_grande_derecho
+        self.cuadro_izquierdo = self.cuadro_normal_grande_izquierdo
+        abajo = self.rect.abajo
+        left = self.rect.x
+        image = self.cuadro_derecho[0]
+        self.rect = image.get_rect()
+        self.rect.abajo = abajo
+        self.rect.x = left
+
+
+    def cambio_a_fuego(self):
+        """Llamado cuando Mario está en un estado GRANDE_PARA_DISPARAR (es decir, cuando
+        obtiene una flor de fuego)"""
+        self.en_estado_transicion = True
+
+        if self.frente_derecha:
+            cuadros = [self.cuadro_fuego_derecho[3],
+                      self.cuadro_verde_grande_derecho[3],
+                      self.cuadro_rojo_grande_derecho[3],
+                      self.cuadro_negro_grande_derecho[3]]
+        else:
+            cuadros = [self.cuadro_fuego_izquierdo[3],
+                      self.cuadro_verde_grande_izquierdo[3],
+                      self.cuadro_rojo_grande_izquierdo[3],
+                      self.cuadro_negro_grande_izquierdo[3]]
+
+        if self.temporizador_transicion_fuego == 0:
+            self.temporizador_transicion_fuego = self.tiempo_actual
+        elif (self.tiempo_actual - self.temporizador_transicion_fuego) > 65 and (self.tiempo_actual - self.temporizador_transicion_fuego) < 130:
+            self.image = cuadros[0]
+        elif (self.tiempo_actual - self.temporizador_transicion_fuego) < 195:
+            self.image = cuadros[1]
+        elif (self.tiempo_actual - self.temporizador_transicion_fuego) < 260:
+            self.image = cuadros[2]
+        elif (self.tiempo_actual - self.temporizador_transicion_fuego) < 325:
+            self.image = cuadros[3]
+        elif (self.tiempo_actual - self.temporizador_transicion_fuego) < 390:
+            self.image = cuadros[0]
+        elif (self.tiempo_actual - self.temporizador_transicion_fuego) < 455:
+            self.image = cuadros[1]
+        elif (self.tiempo_actual - self.temporizador_transicion_fuego) < 520:
+            self.image = cuadros[2]
+        elif (self.tiempo_actual - self.temporizador_transicion_fuego) < 585:
+            self.image = cuadros[3]
+        elif (self.tiempo_actual - self.temporizador_transicion_fuego) < 650:
+            self.image = cuadros[0]
+        elif (self.tiempo_actual - self.temporizador_transicion_fuego) < 715:
+            self.image = cuadros[1]
+        elif (self.tiempo_actual - self.temporizador_transicion_fuego) < 780:
+            self.image = cuadros[2]
+        elif (self.tiempo_actual - self.temporizador_transicion_fuego) < 845:
+            self.image = cuadros[3]
+        elif (self.tiempo_actual - self.temporizador_transicion_fuego) < 910:
+            self.image = cuadros[0]
+        elif (self.tiempo_actual - self.temporizador_transicion_fuego) < 975:
+            self.image = cuadros[1]
+        elif (self.tiempo_actual - self.temporizador_transicion_fuego) < 1040:
+            self.image = cuadros[2]
+            self.fuego = True
+            self.en_estado_transicion = False
+            self.estado = c.CAMINAR
+            self.temporizador_transicion = 0
+
    
         
 
