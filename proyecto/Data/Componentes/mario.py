@@ -192,6 +192,89 @@ class Mario(pg.sprite.Sprite):
             self.get_imagen(193, 2, 16, 30))  # marco 1 del mastil de bandera [9]
         self.cuadro_normal_grande_derecho.append(
             self.get_imagen(209, 2, 16, 29))  # marco 2 del mastil de bandera [10]
+       
+        #Imagenes para mario verde grande#
+
+        self.cuadro_verde_grande_derecho.append(
+            self.get_imagen(176, 192, 16, 32))  # parado derecha [0]
+        self.cuadro_verde_grande_derecho.append(
+            self.get_imagen(81, 192, 16, 32))  # Caminar derecha 1 [1]
+        self.cuadro_verde_grande_derecho.append(
+            self.get_imagen(97, 192, 15, 32))  # Caminar derecha 2 [2]
+        self.cuadro_verde_grande_derecho.append(
+            self.get_imagen(113, 192, 15, 32))  # Caminar derecha 3 [3]
+        self.cuadro_verde_grande_derecho.append(
+            self.get_imagen(144, 192, 16, 32))  # Salto derecha [4]
+        self.cuadro_verde_grande_derecho.append(
+            self.get_imagen(128, 192, 16, 32))  # patinaje derecho [5]
+        self.cuadro_verde_grande_derecho.append(
+            self.get_imagen(336, 192, 16, 32))  # lanzamiento derecho [6]
+        self.cuadro_verde_grande_derecho.append(
+            self.get_imagen(160, 202, 16, 22))  # agacharse derecha [7]
+
+        #Imagenes para mario rojo grande#
+
+        self.cuadro_rojo_grande_derecho.append(
+            self.get_imagen(176, 240, 16, 32))  # parado derecha [0]
+        self.cuadro_rojo_grande_derecho.append(
+            self.get_imagen(81, 240, 16, 32))  # Caminar derecha 1 [1]
+        self.cuadro_rojo_grande_derecho.append(
+            self.get_imagen(97, 240, 15, 32))  # Caminar derecha 2 [2]
+        self.cuadro_rojo_grande_derecho.append(
+            self.get_imagen(113, 240, 15, 32))  # Caminar derecha 3 [3]
+        self.cuadro_rojo_grande_derecho.append(
+            self.get_imagen(144, 240, 16, 32))  # Salto derecha [4]
+        self.cuadro_rojo_grande_derecho.append(
+            self.get_imagen(128, 240, 16, 32))  # patinaje derecho [5]
+        self.cuadro_rojo_grande_derecho.append(
+            self.get_imagen(336, 240, 16, 32))  # lanzamiento derecho [6]
+        self.cuadro_rojo_grande_derecho.append(
+            self.get_imagen(160, 250, 16, 22))  # agacharse derecha [7]
+
+        #Imagenes para mario grande negro#
+
+        self.cuadro_negro_grande_derecho.append(
+            self.get_imagen(176, 144, 16, 32))  # parado derecha [0]
+        self.cuadro_negro_grande_derecho.append(
+            self.get_imagen(81, 144, 16, 32))  # Caminar derecha 1 [1]
+        self.cuadro_negro_grande_derecho.append(
+            self.get_imagen(97, 144, 15, 32))  # Caminar derecha 2 [2]
+        self.cuadro_negro_grande_derecho.append(
+            self.get_imagen(113, 144, 15, 32))  # Caminar derecha 3 [3]
+        self.cuadro_negro_grande_derecho.append(
+            self.get_imagen(144, 144, 16, 32))  # Salto derecha [4]
+        self.cuadro_negro_grande_derecho.append(
+            self.get_imagen(128, 144, 16, 32))  # patinaje derecho [5]
+        self.cuadro_negro_grande_derecho.append(
+            self.get_imagen(336, 144, 16, 32))  # lanzamiento derecho [6]
+        self.cuadro_negro_grande_derecho.append(
+            self.get_imagen(160, 154, 16, 22))  # agacharse derecha [7]
+
+
+        #Imagenes para mario de fuego#
+
+        self.cuadro_fuego_derecho.append(
+            self.get_imagen(176, 48, 16, 32))  # parado derecha [0]
+        self.cuadro_fuego_derecho.append(
+            self.get_imagen(81, 48, 16, 32))  # Caminar derecha 1 [1]
+        self.cuadro_fuego_derecho.append(
+            self.get_imagen(97, 48, 15, 32))  # Caminar derecha 2 [2]
+        self.cuadro_fuego_derecho.append(
+            self.get_imagen(113, 48, 15, 32))  # Caminar derecha 3 [3]
+        self.cuadro_fuego_derecho.append(
+            self.get_imagen(144, 48, 16, 32))  # Salto derecha [4]
+        self.cuadro_fuego_derecho.append(
+            self.get_imagen(128, 48, 16, 32))  # patinaje derecho [5]
+        self.cuadro_fuego_derecho.append(
+            self.get_imagen(336, 48, 16, 32))  # lanzamiento derecho [6]
+        self.cuadro_fuego_derecho.append(
+            self.get_imagen(160, 58, 16, 22))  # agacharse derecha [7]
+        self.cuadro_fuego_derecho.append(
+            self.get_imagen(0, 0, 0, 0))  # marcador de posicion [8]
+        self.cuadro_fuego_derecho.append(
+            self.get_imagen(193, 50, 16, 29))  # marco 1 del mastil de bandera [9]
+        self.cuadro_fuego_derecho.append(
+            self.get_imagen(209, 50, 16, 29))  # marco 2 del mastil de bandera [10]
 
 
    
