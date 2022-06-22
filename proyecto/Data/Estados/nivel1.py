@@ -856,3 +856,228 @@ class Nivel1(herramientas._Estado):
                 self.mario.estado = c.FIN_DEL_NIVEL
 
         self.mario.rect.y -= 1
+
+    def ajustar_mario_para_colisiones_enemigas_y(self, enemigo):
+        """Mario colisiona con todos los enemigos en el eje y"""
+        if self.mario.y_vel > 0:
+            configuracion.SFX['pisar_fuerte'].play()
+            self.informacion_juego[c.PUNTAJE] += 100
+            self.lista_puntaje_movil.append(
+                puntaje.Puntaje(enemigo.rect.centro_x - self.visor.x,
+                            enemigo.rect.y, 100))
+            enemigo.estado = c.SALTO_SOBRE
+            enemigo.kill()
+            if enemigo.nombre == c.GOOMBA:
+                enemigo.temporizador_timer = self.tiempo_actual
+                self.sprites_sobre_muerte_en_grupo.add(enemigo)
+            elif enemigo.nombre == c.KOOPA:
+                self.coraza_grupo.add(enemigo)
+
+            self.mario.rect.abajo = enemigo.rect.arriba
+            self.mario.estado = c.SALTO
+            self.mario.y_vel = -7
+        
+
+
+    def ajustar_mario_para_colisiones_coraza_y(self, coraza):
+        """Mario colisiona con Koopas en sus caparazones en el eje y"""
+        if self.mario.y_vel > 0:
+            self.informacion_juego[c.PUNTAJE] += 400
+            self.lista_puntaje_movil.append(
+                puntaje.Puntaje(self.mario.rect.centro_x - self.visor.x,
+                            self.mario.rect.y, 400))
+            if coraza.estado == c.SALTO_SOBRE:
+                configuracion.SFX['patada'].play()
+                coraza.estado = c.DESLICE_DE_CAPARAZON
+                if self.mario.rect.centro_x < coraza.rect.centro_x:
+                    coraza.direccion = c.DERECHA
+                    coraza.rect.ixquierda = self.mario.rect.derecha + 5
+                else:
+                    coraza.direccion = c.IZQUIERDA
+                    coraza.rect.derecha = self.mario.rect.izquierda - 5
+            else:
+                coraza.estado = c.SALTO_SOBRE
+
+
+    def ajustar_posicion_enemigo(self):
+        """Mueve a todos los enemigos a lo largo de los ejes x, y y comprueba si hay colisiones."""
+        for enemigo in self.grupo_enemigo:
+            enemigo.rect.x += enemigo.x_vel
+            self.comprobar_enemigos_colisiones_x(enemigo)
+
+            enemigo.rect.y += enemigo.y_vel
+            self.comprobar_enemigos_y_colisiones(enemigo)
+            self.eliminar_siEsta_fuerdaDePantalla(enemigo)
+
+
+    def comprobar_enemigos_colisiones_x(self, enemigo):
+        """Colisiones enemigas a lo largo del eje x. Elimina al enemigo del grupo enemigo.
+        para compararlo con todos los demás enemigos, luego vuelve a agregarlo."""
+        enemigo.kill()
+
+        colisionador = pg.sprite.spritecollideany(enemigo, self.terreno_paso_grupo_tuberia)
+        colisionador_enemigo = pg.sprite.spritecollideany(enemigo, self.grupo_enemigo)
+
+        if colisionador:
+            if enemigo.direccion == c.DERECHA:
+                enemigo.rect.derecha = colisionador.rect.izquierda
+                enemigo.direccion = c.izquierda
+                enemigo.x_vel = -2
+            elif enemigo.direccion == c.izquierda:
+                enemigo.rect.izquierda = colisionador.rect.derecha
+                enemigo.direccion = c.DERECHA
+                enemigo.x_vel = 2
+
+
+        elif colisionador_enemigo:
+            if enemigo.direccion == c.DERECHA:
+                enemigo.rect.derecha = colisionador_enemigo.rect.izquierda
+                enemigo.direction = c.izquierda
+                colisionador_enemigo.direccion = c.DERECHA
+                enemigo.x_vel = -2
+                colisionador_enemigo.x_vel = 2
+            elif enemigo.direccion == c.izquierda:
+                enemigo.rect.izquierda = colisionador_enemigo.rect.derecha
+                enemigo.direccion = c.DERECHA
+                colisionador_enemigo.direccion = c.izquierda
+                enemigo.x_vel = 2
+                colisionador_enemigo.x_vel = -2
+
+        self.grupo_enemigo.add(enemigo)
+        self.mario_y_grupo_enemigo.add(self.grupo_enemigo)
+
+
+    def comprobar_enemigos_y_colisiones(self, enemigo):
+        """Colisiones enemigas en el eje y"""
+        colisionador = pg.sprite.spritecollideany(enemigo, self.terreno_paso_grupo_tuberia)
+        ladrillo = pg.sprite.spritecollideany(enemigo, self.ladrillo_grupo)
+        caja_monedas = pg.sprite.spritecollideany(enemigo, self.caja_monedas_grupo)
+
+        if colisionador:
+            if enemigo.rect.abajo > colisionador.rect.abajo:
+                enemigo.y_vel = 7
+                enemigo.rect.arriba = colisionador.rect.abajo
+                enemigo.estado = c.CAERSE
+            elif enemigo.rect.abajo < colisionador.rect.abajo:
+
+                enemigo.y_vel = 0
+                enemigo.rect.abajo = colisionador.rect.arriba
+                enemigo.estado = c.CAMINAR
+
+        elif ladrillo:
+            if ladrillo.estado == c.LADRILLO_GOLPEADO:
+                enemigo.kill()
+                self.sprites_sobre_muerte_en_grupo.add(enemigo)
+                if self.mario.rect.centro_x > ladrillo.rect.centro_x:
+                    enemigo.empezar_salto_de_muerte('derecha')
+                else:
+                    enemigo.empezar_salto_de_muerte('izquierda')
+
+            elif enemigo.rect.x > ladrillo.rect.x:
+                enemigo.y_vel = 7
+                enemigo.rect.arriba = ladrillo.rect.abajo
+                enemigo.estado = c.CAERSE
+            else:
+                enemigo.y_vel = 0
+                enemigo.rect.abajo = ladrillo.rect.arriba
+                enemigo.estado = c.CAMINAR
+
+        elif caja_monedas:
+            if caja_monedas.estado == c.LADRILLO_GOLPEADO:
+                self.informacion_juego[c.PUNTAJE] += 100
+                self.lista_puntaje_movil.append(
+                    puntaje.Puntaje(enemigo.rect.centro_x - self.visor.x,
+                                enemigo.rect.y, 100))
+                enemigo.kill()
+                self.sprites_sobre_muerte_en_grupo.add(enemigo)
+                if self.mario.rect.centro_x > caja_monedas.rect.centro_x:
+                    enemigo.empezar_salto_de_muerte('derecha')
+                else:
+                    enemigo.empezar_salto_de_muerte('izquierda')
+
+            elif enemigo.rect.x > caja_monedas.rect.x:
+                enemigo.y_vel = 7
+                enemigo.rect.arriba = caja_monedas.rect.abajo
+                enemigo.estado = c.CAERSE
+            else:
+                enemigo.y_vel = 0
+                enemigo.rect.abajo = caja_monedas.rect.arriba
+                enemigo.estado = c.CAMINAR
+
+
+        else:
+            enemigo.rect.y += 1
+            grupo_de_prueba = pg.sprite.Group(self.terreno_paso_grupo_tuberia,
+                                         self.caja_monedas_grupo,
+                                         self.ladrillo_grupo)
+            if pg.sprite.spritecollideany(enemigo, grupo_de_prueba) is None:
+                if enemigo.estado != c.SALTO:
+                    enemigo.estado = c.CAERSE
+
+            enemigo.rect.y -= 1
+
+
+    def ajustar_posicion_caparazon(self):
+        """Mueve cualquier koopa en un caparazón a lo largo de los ejes x, y y verifica
+        colisiones"""
+        for coraza in self.coraza_grupo:
+            coraza.rect.x += coraza.x_vel
+            self.verifica_colisiones_coraza_x(coraza)
+
+            coraza.rect.y += coraza.y_vel
+            self.verifica_coraza_y_colisiones(coraza)
+            self.eliminar_siEsta_fuerdaDePantalla(coraza)
+
+
+    def verifica_colisiones_coraza_x(self, coraza):
+        """Colisiones de corazas a lo largo del eje x"""
+        colisionador = pg.sprite.spritecollideany(coraza, self.terreno_paso_grupo_tuberia)
+        enemigo = pg.sprite.spritecollideany(coraza, self.grupo_enemigo)
+
+        if colisionador:
+            configuracion.SFX['golpe'].play()
+            if coraza.x_vel > 0:
+                coraza.direccion = c.IZQUIERDA
+                coraza.rect.derecha = colisionador.rect.izquierda
+            else:
+                coraza.direccion = c.DERECHA
+                coraza.rect.izquierda = colisionador.rect.derecha
+
+        if enemigo:
+            configuracion.SFX['patada'].play()
+            self.informacion_juego[c.PUNTAJE] += 100
+            self.lista_puntaje_movil.append(
+                puntaje.Puntaje(enemigo.rect.derecha - self.visor.x,
+                            enemigo.rect.y, 100))
+            enemigo.kill()
+            self.sprites_sobre_muerte_en_grupo.add(enemigo)
+            enemigo.empezar_salto_de_muerte(coraza.direccion)
+
+
+    def verifica_coraza_y_colisiones(self, coraza):
+        """Colisiones de capa a lo largo del eje y"""
+        colisionador = pg.sprite.spritecollideany(coraza, self.terreno_paso_grupo_tuberia)
+
+        if colisionador:
+            coraza.y_vel = 0
+            coraza.rect.abajo = colisionador.rect.arriba
+            coraza.estado = c.DESLICE_DE_CAPARAZON
+
+        else:
+            coraza.rect.y += 1
+            if pg.sprite.spritecollideany(coraza, self.terreno_paso_grupo_tuberia) is None:
+                coraza.estado = c.CAERSE
+            coraza.rect.y -= 1
+
+
+    def ajustar_posicion_superpoder(self):
+        """Mueve hongos, estrellas y bolas de fuego a lo largo de los ejes x, y"""
+        for superpoder in self.superpoder_grupo:
+            if superpoder.nombre == c.HONGOS:
+                self.ajustar_posicion_hongo(superpoder)
+            elif superpoder.nombre == c.ESTRELLA:
+                self.ajustar_posicion_estrella(superpoder)
+            elif superpoder.nombre == c.BOLA_DE_FUEGO:
+                self.ajustar_posicion_bolaFuego(superpoder)
+            elif superpoder.nombre == '1_hongo_arriba':
+                self.ajustar_posicion_hongo(superpoder)
