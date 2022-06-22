@@ -492,7 +492,7 @@ class Nivel1(herramientas._Estado):
         self.ajustar_posicion_mario()
         self.ajustar_posicion_enemigo()
         self.ajustar_posicion_caparazon()
-        self.ajustar_posicion_encendido()
+        self.ajustar_posicion_superpoder()
 
 
     def ajustar_posicion_mario(self):
